@@ -1,0 +1,80 @@
+{
+    "componentPath": "./src/wwObject.vue",
+    "content": {
+        "type": "ww-form-container",
+        "data": {
+            "content": [],
+            "isNew": true,
+            "config": {
+                "type": "weweb-email",
+                "name": "newsletter",
+                "autocomplete": true,
+                "redirect": {
+                    "enabled": false
+                },
+                "js": null
+            }
+        }
+    },
+    "upsales": {
+        "wwAnalytics": {
+            "click": false
+        }
+    },
+    "cmsOptions": {
+        "displayName": {
+            "en": "Form Container",
+            "fr": "Conteneur de Formulaire"
+        },
+        "wwObjectMenu": {
+            "items": [
+                {
+                    "name": "OPTIONS",
+                    "text": {
+                        "en": "Options...",
+                        "fr": "Options..."
+                    },
+                    "icon": "wwi wwi-edit-other",
+                    "main": true,
+                    "action": "options"
+                },
+                {
+                    "name": "DEFAULT",
+                    "text": {
+                        "en": "Default",
+                        "fr": "Défault"
+                    },
+                    "icon": "far fa-paper-plane",
+                    "action": "defaultStatus"
+                },
+                {
+                    "name": "LOADING",
+                    "text": {
+                        "en": "Loading",
+                        "fr": "Chargement"
+                    },
+                    "icon": "fa fa-spinner",
+                    "action": "loadingStatus"
+                },
+                {
+                    "name": "SUCCESS",
+                    "text": {
+                        "en": "Success",
+                        "fr": "Succes"
+                    },
+                    "icon": "wwi wwi-check",
+                    "action": "successStatus"
+                },
+                {
+                    "name": "ERROR",
+                    "text": {
+                        "en": "Error",
+                        "fr": "Erreur"
+                    },
+                    "icon": "wwi wwi-cross",
+                    "action": "errorStatus"
+                }
+            ]
+        }
+    }
+}
