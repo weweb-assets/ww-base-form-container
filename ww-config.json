@@ -1,7 +1,7 @@
 {
     "componentPath": "./src/wwObject.vue",
     "content": {
-        "type": "ww-form-container",
+        "type": "ww_form_container_secure",
         "data": {
             "content": [],
             "isNew": true,
