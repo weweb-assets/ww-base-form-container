@@ -111,7 +111,7 @@ export default {
             },
             // WWOBJECT
             wwObject: this.options.data.wwObject,
-            config: this.options.data.config,
+            config: this.options.data.config || {},
             // DATA
             type: '',
             result: {

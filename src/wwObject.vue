@@ -159,7 +159,7 @@ export default {
                     firstPage: 'WW_FORM_SECURE_OPTIONS',
                     data: {
                         wwObject: this.wwObject,
-                        config: config
+                        config: config || {}
                     }
                 };
 
