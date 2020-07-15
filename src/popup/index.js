@@ -1,15 +1,15 @@
-import wwFormConfigPopup from './wwFormConfigPopup.vue';
+import wwFormSecureConfigPopup from './wwFormSecureConfigPopup.vue';
 import wwFormIdPopup from './wwFormIdPopup.vue';
 import wwFormClassPopup from './wwFormClassPopup.vue';
 
-wwLib.wwPopups.addPopup('wwFormConfigPopup', wwFormConfigPopup);
+wwLib.wwPopups.addPopup('wwFormSecureConfigPopup', wwFormSecureConfigPopup);
 wwLib.wwPopups.addPopup('wwFormIdPopup', wwFormIdPopup);
 wwLib.wwPopups.addPopup('wwFormClassPopup', wwFormClassPopup);
 
 wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
     title: {
         en: 'Select Form element',
-        fr: 'Sélectionner un élément de formulaire',
+        fr: 'Sélectionner un élément de formulaire'
     },
     type: 'wwPopupList',
     buttons: null,
@@ -18,34 +18,34 @@ wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
             SUBMIT: {
                 separator: {
                     en: 'Action',
-                    fr: 'Action',
+                    fr: 'Action'
                 },
                 title: {
                     en: 'Submit Button',
-                    fr: `Bouton d'envoies`,
+                    fr: `Bouton d'envoies`
                 },
                 desc: {
                     en: 'To send all the form element data',
-                    fr: `Pour envoyer toutes les données d'élément de formulaire`,
+                    fr: `Pour envoyer toutes les données d'élément de formulaire`
                 },
                 icon: 'wwi wwi-button',
                 next: null,
                 result: {
-                    wwObjectType: 'ww-form-submit',
-                },
+                    wwObjectType: 'ww-form-submit'
+                }
             },
             TEXT: {
                 separator: {
                     en: 'Inputs',
-                    fr: 'Inputs',
+                    fr: 'Inputs'
                 },
                 title: {
                     en: 'Text',
-                    fr: 'Texte',
+                    fr: 'Texte'
                 },
                 desc: {
                     en: 'Firstname, name, address, etc.',
-                    fr: 'Nom, prénom, adresse, etc.',
+                    fr: 'Nom, prénom, adresse, etc.'
                 },
                 icon: 'wwi wwi-text',
                 next: null,
@@ -57,20 +57,20 @@ wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
                             type: 'text',
                             placeholder: {
                                 en: 'Enter text...',
-                                fr: 'Entrez du text...',
-                            },
-                        },
-                    },
-                },
+                                fr: 'Entrez du text...'
+                            }
+                        }
+                    }
+                }
             },
             EMAIL: {
                 title: {
                     en: 'Email',
-                    fr: 'Email',
+                    fr: 'Email'
                 },
                 desc: {
                     en: 'john@doe.com',
-                    fr: 'john@doe.com',
+                    fr: 'john@doe.com'
                 },
                 icon: 'wwi wwi-newsletter',
                 next: null,
@@ -82,20 +82,20 @@ wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
                             type: 'email',
                             placeholder: {
                                 en: 'Enter email...',
-                                fr: 'Entrez une adresse email...',
-                            },
-                        },
-                    },
-                },
+                                fr: 'Entrez une adresse email...'
+                            }
+                        }
+                    }
+                }
             },
             PASSWORD: {
                 title: {
                     en: 'Password',
-                    fr: 'Mot de passe',
+                    fr: 'Mot de passe'
                 },
                 desc: {
                     en: '**********',
-                    fr: '**********',
+                    fr: '**********'
                 },
                 icon: 'fas fa-key',
                 next: null,
@@ -107,20 +107,20 @@ wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
                             type: 'password',
                             placeholder: {
                                 en: 'Enter password...',
-                                fr: 'Entrez un mot de passe...',
-                            },
-                        },
-                    },
-                },
+                                fr: 'Entrez un mot de passe...'
+                            }
+                        }
+                    }
+                }
             },
             PHONE: {
                 title: {
                     en: 'Phone',
-                    fr: 'Téléphone',
+                    fr: 'Téléphone'
                 },
                 desc: {
                     en: 'Match format of your choice like 123-45-678',
-                    fr: 'Correspond au format de votre choix comme 123-45-678',
+                    fr: 'Correspond au format de votre choix comme 123-45-678'
                 },
                 icon: 'fas fa-phone',
                 next: null,
@@ -132,35 +132,35 @@ wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
                             type: 'phone',
                             placeholder: {
                                 en: 'Enter phone number...',
-                                fr: 'Entrez un numéro de téléphone...',
-                            },
-                        },
-                    },
-                },
+                                fr: 'Entrez un numéro de téléphone...'
+                            }
+                        }
+                    }
+                }
             },
             TEXTAREA: {
                 title: {
                     en: 'Textarea',
-                    fr: 'Zone de texte',
+                    fr: 'Zone de texte'
                 },
                 desc: {
                     en: 'For large texts like messages',
-                    fr: 'Pour de grand texte comme des messages',
+                    fr: 'Pour de grand texte comme des messages'
                 },
                 icon: 'fas fa-align-justify',
                 next: null,
                 result: {
-                    wwObjectType: 'ww-form-textarea',
-                },
+                    wwObjectType: 'ww-form-textarea'
+                }
             },
             NUMBER: {
                 title: {
                     en: 'Number',
-                    fr: 'Nombre',
+                    fr: 'Nombre'
                 },
                 desc: {
                     en: 'To select an integer',
-                    fr: 'Pour choisir un nombre',
+                    fr: 'Pour choisir un nombre'
                 },
                 icon: 'fas fa-square-root-alt',
                 next: null,
@@ -172,60 +172,60 @@ wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
                             type: 'number',
                             placeholder: {
                                 en: 'Enter a number...',
-                                fr: 'Entrez un nombre...',
-                            },
-                        },
-                    },
-                },
+                                fr: 'Entrez un nombre...'
+                            }
+                        }
+                    }
+                }
             },
             CHECKBOX: {
                 separator: {
                     en: 'Selectors',
-                    fr: 'Sélecteurs',
+                    fr: 'Sélecteurs'
                 },
                 title: {
                     en: 'Checkbox',
-                    fr: 'Case à cocher',
+                    fr: 'Case à cocher'
                 },
                 desc: {
                     en: 'To pick a proposition',
-                    fr: 'Pour choisir une proposition',
+                    fr: 'Pour choisir une proposition'
                 },
                 icon: 'far fa-check-square',
                 next: null,
                 result: {
-                    wwObjectType: 'ww-form-checkbox',
-                },
+                    wwObjectType: 'ww-form-checkbox'
+                }
             },
             RADIO: {
                 title: {
                     en: 'Radio',
-                    fr: 'Radio',
+                    fr: 'Radio'
                 },
                 desc: {
                     en: 'To select one proposition',
-                    fr: 'Pour choisir une propositions',
+                    fr: 'Pour choisir une propositions'
                 },
                 icon: 'far fa-dot-circle',
                 next: null,
                 result: {
-                    wwObjectType: 'ww-form-radio',
-                },
+                    wwObjectType: 'ww-form-radio'
+                }
             },
             DROPDOWN: {
                 title: {
                     en: 'Dropdown',
-                    fr: 'Menu déroulant',
+                    fr: 'Menu déroulant'
                 },
                 desc: {
                     en: 'To pick a value from a menu',
-                    fr: 'Pour choisir une valeur depuis un menu déroulant',
+                    fr: 'Pour choisir une valeur depuis un menu déroulant'
                 },
                 icon: 'wwi wwi-chevron-down',
                 next: null,
                 result: {
-                    wwObjectType: 'ww-form-dropdown',
-                },
+                    wwObjectType: 'ww-form-dropdown'
+                }
             },
             // RANGE: {
             //     title: {
@@ -241,15 +241,15 @@ wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
             DATE: {
                 separator: {
                     en: 'Spécific',
-                    fr: 'Spécifique',
+                    fr: 'Spécifique'
                 },
                 title: {
                     en: 'Date',
-                    fr: 'Date',
+                    fr: 'Date'
                 },
                 desc: {
                     en: 'Open a date picker popup',
-                    fr: 'Ouvre un sélecteur de date',
+                    fr: 'Ouvre un sélecteur de date'
                 },
                 icon: 'far fa-calendar-minus',
                 next: null,
@@ -261,20 +261,20 @@ wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
                             type: 'date',
                             placeholder: {
                                 en: 'Enter a date...',
-                                fr: 'Entrez une date...',
-                            },
-                        },
-                    },
-                },
+                                fr: 'Entrez une date...'
+                            }
+                        }
+                    }
+                }
             },
             TIME: {
                 title: {
                     en: 'Time',
-                    fr: 'Heure',
+                    fr: 'Heure'
                 },
                 desc: {
                     en: 'Open a time picker popup',
-                    fr: `Ouvre un sélecteur d'heure`,
+                    fr: `Ouvre un sélecteur d'heure`
                 },
                 icon: 'far fa-clock',
                 next: null,
@@ -286,11 +286,11 @@ wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
                             type: 'time',
                             placeholder: {
                                 en: 'Enter a time...',
-                                fr: 'Entrez une heure...',
-                            },
-                        },
-                    },
-                },
+                                fr: 'Entrez une heure...'
+                            }
+                        }
+                    }
+                }
             },
             // FILE: {
             //     title: {
@@ -319,77 +319,77 @@ wwLib.wwPopups.addStory('WWFORM_ELEMENTS', {
             CAPTCHA_V2: {
                 title: {
                     en: 'Captcha v2 Google',
-                    fr: 'Captcha v2 Google',
+                    fr: 'Captcha v2 Google'
                 },
                 desc: {
                     en: 'To prevent robot from sending you a message',
-                    fr: 'Pour empêcher des robots de vous envoyer un message',
+                    fr: 'Pour empêcher des robots de vous envoyer un message'
                 },
                 icon: 'far fa-square',
                 next: null,
                 result: {
-                    wwObjectType: 'ww-form-captcha',
-                },
-            },
-        },
-    },
+                    wwObjectType: 'ww-form-captcha'
+                }
+            }
+        }
+    }
 });
 
-wwLib.wwPopups.addStory('WW_FORM_CONFIG_POPUP', {
+wwLib.wwPopups.addStory('WW_FORM_SECURE_CONFIG_POPUP', {
     title: {
         en: 'Form Configuration',
-        fr: `Configuration du formulaire`,
+        fr: `Configuration du formulaire`
     },
-    type: 'wwFormConfigPopup',
+    type: 'wwFormSecureConfigPopup',
     buttons: {
         OK: {
             text: {
                 en: 'Ok',
-                fr: 'Valider',
+                fr: 'Valider'
             },
-            next: false,
-        },
-    },
+            next: false
+        }
+    }
 });
 
 wwLib.wwPopups.addStory('WW_FORM_ID_POPUP', {
     title: {
         en: 'Form Id',
-        fr: `Id du formulaire`,
+        fr: `Id du formulaire`
     },
     type: 'wwFormIdPopup',
     buttons: {
         OK: {
             text: {
                 en: 'Ok',
-                fr: 'Valider',
+                fr: 'Valider'
             },
-            next: false,
-        },
-    },
+            next: false
+        }
+    }
 });
 
 wwLib.wwPopups.addStory('WW_FORM_CLASS_POPUP', {
     title: {
         en: 'Form Class',
-        fr: `Class du formulaire`,
+        fr: `Class du formulaire`
     },
     type: 'wwFormClassPopup',
     buttons: {
         OK: {
             text: {
                 en: 'Ok',
-                fr: 'Valider',
+                fr: 'Valider'
             },
-            next: false,
-        },
-    },
+            next: false
+        }
+    }
 });
 
-wwLib.wwPopups.addStory('WW_FORM_OPTIONS', {
+wwLib.wwPopups.addStory('WW_FORM_SECURE_OPTIONS', {
     title: {
         en: 'Edit Form',
-        fr: 'Editer le formulaire',
+        fr: 'Editer le formulaire'
     },
     type: 'wwPopupEditWwObject',
     buttons: null,
@@ -398,43 +398,43 @@ wwLib.wwPopups.addStory('WW_FORM_OPTIONS', {
             ACTION_API: {
                 separator: {
                     en: 'CONFIGURATION',
-                    fr: 'CONFIGURATION',
+                    fr: 'CONFIGURATION'
                 },
                 title: {
                     en: 'Form Configuration',
-                    fr: 'Configuration du formulaire',
+                    fr: 'Configuration du formulaire'
                 },
                 desc: {
                     en: '',
-                    fr: '',
+                    fr: ''
                 },
                 icon: 'wwi wwi-config',
-                next: 'WW_FORM_CONFIG_POPUP',
+                next: 'WW_FORM_SECURE_CONFIG_POPUP'
             },
             ID: {
                 title: {
                     en: 'Form Id',
-                    fr: 'Id du formulaire',
+                    fr: 'Id du formulaire'
                 },
                 desc: {
                     en: 'Edit the attribute ID',
-                    fr: "Modifier l'attribut ID",
+                    fr: "Modifier l'attribut ID"
                 },
                 icon: 'wwi wwi-icon',
-                next: 'WW_FORM_ID_POPUP',
+                next: 'WW_FORM_ID_POPUP'
             },
             CLASS: {
                 title: {
                     en: 'Form Class',
-                    fr: 'Classes du formulaire',
+                    fr: 'Classes du formulaire'
                 },
                 desc: {
                     en: 'Edit the class list',
-                    fr: 'Modifier la liste de classe',
+                    fr: 'Modifier la liste de classe'
                 },
                 icon: 'wwi wwi-edit',
-                next: 'WW_FORM_CLASS_POPUP',
-            },
-        },
-    },
+                next: 'WW_FORM_CLASS_POPUP'
+            }
+        }
+    }
 });

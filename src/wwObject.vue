@@ -156,7 +156,7 @@ export default {
             try {
                 const config = await this.getFormConfig();
                 const options = {
-                    firstPage: 'WW_FORM_OPTIONS',
+                    firstPage: 'WW_FORM_SECURE_OPTIONS',
                     data: {
                         wwObject: this.wwObject,
                         config: config

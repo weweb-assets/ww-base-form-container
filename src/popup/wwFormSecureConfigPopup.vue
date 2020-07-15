@@ -90,7 +90,7 @@
 
 <script>
 export default {
-    name: 'wwFormConfigPopup',
+    name: 'wwFormSecureConfigPopup',
     props: {
         options: {
             type: Object,
