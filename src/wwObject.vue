@@ -1,310 +1,394 @@
 <template>
-    <div class="ww-form">
-        <!-- wwManager:start -->
-        <wwOrangeButton class="ww-orange-button" v-if="wwObjectCtrl.getSectionCtrl().getEditMode() == 'CONTENT'"></wwOrangeButton>
-        <div class="ww-form-status" :class="status" v-if="wwObjectCtrl.getSectionCtrl().getEditMode() == 'CONTENT'">Form status: {{ status }}</div>
-        <!-- wwManager:end -->
+    <form
+        :name="content.name"
+        :autocomplete="content.autocomplete"
+        @submit.prevent="submit"
+        class="ww-form-container"
+        :class="[content.state, level % 2 === 0 ? 'odd' : 'even', { editing: isEditing, selected: isSelected }]"
+    >
+        <div style="position: relative">
+            <wwLayout
+                :class="{ hidden: content.state === 'success' }"
+                class="ww-form-container__content -normal"
+                path="content"
+            />
+            <wwLayout
+                :class="{ hidden: content.state !== 'success' }"
+                class="ww-form-container__content -success"
+                path="successContent"
+            />
+            <wwLayout v-if="content.state === 'error'" class="ww-form-container__content -error" path="errorContent" />
+        </div>
 
-        <form :id="wwObject.content.data.id" :name="wwObject.content.data.config.name" :autocomplete="wwObject.content.data.config.autocomplete" @submit.prevent="submit" :class="wwObject.content.data.class">
-            <!-- FORM CONTENT -->
-            <wwLayoutColumn
-                ref="content"
-                tag="div"
-                class="ww-obj"
-                ww-default="ww-form-input"
-                :ww-list="wwObject.content.data.content"
-                @ww-add="add(wwObject.content.data.content, $event)"
-                @ww-remove="remove(wwObject.content.data.content, $event)"
-            >
-                <wwObject v-for="wwObj in wwObject.content.data.content" :key="wwObj.uniqueId" :ww-object="wwObj"></wwObject>
-            </wwLayoutColumn>
-        </form>
-    </div>
+        <!-- wwEditor:start -->
+        <div class="ww-form-container__status label-xs" :class="content.state">
+            {{ content.state }}
+        </div>
+        <div class="ww-form-container__menu" :class="level % 2 ? 'left' : 'right'">
+            <wwEditorIcon small name="config" />
+        </div>
+        <!-- wwEditor:end -->
+    </form>
 </template>
 
 <script>
-/* wwManager:start */
-import { GET_FORM_CONFIG, CREATE_FORM_CONFIG, UPDATE_FORM_CONFIG } from './graphql';
-import './popup';
-/* wwManager:end */
+/* wwEditor:start */
+import { getSettingsConfigurations } from './configurations';
+/* wwEditor:end */
 
 export default {
-    name: 'ww-form-container',
+    name: '__COMPONENT_NAME__',
     props: {
-        wwObjectCtrl: Object
+        content: Object,
+        /* wwEditor:start */
+        wwEditorState: Object,
+        /* wwEditor:end */
+    },
+    wwDefaultContent: {
+        content: [
+            { isWwObject: true, type: 'ww-form-input' },
+            { isWwObject: true, type: 'ww-button' },
+        ],
+        successContent: [{ isWwObject: true, type: 'ww-text' }],
+        errorContent: [{ isWwObject: true, type: 'ww-text' }],
+        state: 'normal',
+        name: '',
+        autocomplete: true,
+        submitAction: 'weweb-email',
+        method: 'post',
+        url: '',
+        data: [],
+        headers: [],
+        queries: [],
+        wewebEmail: {},
+    },
+    /* wwEditor:start */
+    wwEditorConfiguration({ content }) {
+        return {
+            settingsOptions: {
+                state: {
+                    path: 'state',
+                    label: { en: 'Form state', fr: 'fr' },
+                    type: 'TextSelect',
+                    options: {
+                        options: [
+                            { value: 'normal', label: { en: 'Normal', fr: 'fr' } },
+                            { value: 'success', label: { en: 'Success', fr: 'fr' } },
+                            { value: 'error', label: { en: 'Error', fr: 'fr' } },
+                        ],
+                    },
+                },
+                name: {
+                    path: 'name',
+                    label: { en: 'Form name', fr: 'fr' },
+                    type: 'Text',
+                    options: {
+                        placeholder: 'newsletter',
+                    },
+                },
+                autocomplete: {
+                    path: 'autocomplete',
+                    label: { en: 'Autocomplete', fr: 'fr' },
+                    type: 'OnOff',
+                },
+                submitAction: {
+                    path: 'submitAction',
+                    label: { en: 'Submit action', fr: 'fr' },
+                    type: 'TextSelect',
+                    options: {
+                        options: [
+                            { value: 'custom-request', label: { en: 'Custom request', fr: 'fr' } },
+                            { value: 'weweb-email', label: { en: 'WeWeb email', fr: 'fr' } },
+                        ],
+                    },
+                },
+                ...getSettingsConfigurations(content.submitAction),
+            },
+            advancedOptions: {
+                data: {
+                    path: 'data',
+                    label: { en: 'Hidden input', fr: 'fr' },
+                    type: 'List',
+                    options: {
+                        options: [
+                            {
+                                path: 'key',
+                                type: 'Text',
+                                options: {
+                                    placeholder: 'Key',
+                                },
+                            },
+                            {
+                                path: 'value',
+                                type: 'Text',
+                                options: {
+                                    placeholder: 'Value',
+                                },
+                            },
+                        ],
+                    },
+                },
+                query: {
+                    path: 'queries',
+                    label: { en: 'Query var', fr: 'fr' },
+                    type: 'List',
+                    options: {
+                        options: [
+                            {
+                                path: 'key',
+                                type: 'Text',
+                                options: {
+                                    placeholder: 'Variable',
+                                },
+                            },
+                        ],
+                    },
+                },
+            },
+        };
+    },
+    /* wwEditor:end */
+    inject: {
+        parentLevel: { from: 'level', default: 0 },
+    },
+    provide() {
+        return {
+            level: this.level,
+        };
     },
     data() {
         return {
-            form: null,
-            status: 'default'
+            designName: wwLib.wwWebsiteData.getWebsiteName(),
+            /* wwEditor:start */
+            designId: wwLib.wwWebsiteData.getInfo().id,
+            apiUrl: wwLib.wwApiRequests._getApiUrl(),
+            /* wwEditor:end */
         };
     },
     computed: {
-        wwObject() {
-            return this.wwObjectCtrl.get();
-        }
+        level() {
+            return this.parentLevel + 1;
+        },
+        isEditing() {
+            /* wwEditor:start */
+            return this.wwEditorState.editMode === wwLib.wwSectionHelper.EDIT_MODES.CONTENT;
+            /* wwEditor:end */
+            // eslint-disable-next-line no-unreachable
+            return false;
+        },
+        isSelected() {
+            /* wwEditor:start */
+            return this.wwEditorState.isSelected;
+            /* wwEditor:end */
+            // eslint-disable-next-line no-unreachable
+            return false;
+        },
     },
-    mounted() {
-        this.init();
-        this.$emit('ww-loaded', this);
+    /* wwEditor:start */
+    watch: {
+        'content.submitAction'() {
+            switch (this.content.submitAction) {
+                case 'weweb-email':
+                    this.$emit('update', {
+                        method: 'post',
+                        url: `${this.apiUrl}/design/${this.designId}/form/email`,
+                        headers: [],
+                        wewebEmail: {
+                            recipients: [{ email: wwLib.$store.getters['manager/getUser'].email }],
+                        },
+                    });
+                    break;
+                case 'custom-request':
+                    this.$emit('update', {
+                        method: 'post',
+                        url: '',
+                        headers: [],
+                        wewebEmail: {},
+                    });
+                    break;
+            }
+        },
     },
+    /* wwEditor:end */
     methods: {
-        async init() {
-            this.wwObject.content.data.content = this.wwObject.content.data.content || [];
-            this.wwObject.content.data.config = this.wwObject.content.data.config || {};
-
-            this.wwObjectCtrl.update(this.wwObject);
-
-            this.form = this.$el.querySelector('form');
-        },
-        defaultStatus() {
-            this.status = 'default';
-            wwLib.$emit(`ww-form-status`, this.status);
-            this.wwObjectCtrl.update(this.wwObject);
-        },
-        loadingStatus() {
-            this.status = 'loading';
-            wwLib.$emit(`ww-form-status`, this.status);
-            this.wwObjectCtrl.update(this.wwObject);
-        },
-        successStatus() {
-            this.status = 'success';
-            wwLib.$emit(`ww-form-status`, this.status);
-            this.wwObjectCtrl.update(this.wwObject);
-        },
-        errorStatus() {
-            this.status = 'error';
-            wwLib.$emit(`ww-form-status`, this.status);
-            this.wwObjectCtrl.update(this.wwObject);
-        },
-        goToPage(pageId) {
-            wwLib.wwLinkPopups.closeAll();
-            const path = wwLib.wwWebsiteData.getPageRoute(pageId, true) || '/';
-            wwLib.goTo(path);
-            this.$emit('next', null);
+        getDataWeWebEmail() {
+            if (this.content.submitAction !== 'weweb-email') return {};
+            return {
+                designName: this.designName,
+                recipients: this.content.wewebEmail.recipients,
+            };
         },
         async submit(form) {
             try {
-                // CHANGE STATUS
-                this.loadingStatus();
+                if (this.content.state === 'success' || this.content.state === 'loading') return;
+
+                this.$emit('update', { state: 'loading' });
 
                 // INIT DATA
-                const data = new FormData();
+                const data = {};
 
                 // ADD DATA REQUEST
                 for (const elem of form.srcElement.elements) {
                     if (elem.nodeName === 'INPUT' || elem.nodeName === 'TEXTAREA' || elem.nodeName === 'SELECT') {
-                        data.append(elem.name, elem.value);
+                        data[elem.name] = elem.value;
                     }
                 }
+
                 // ADD QUERY VAR
-                if (this.wwObject.content.data.config.queryVar && this.wwObject.content.data.config.queryVar != {}) {
-                    for (const elem of this.wwObject.content.data.config.queryVar) {
-                        const value = this.$route.query[elem];
-                        if (value) data.append(elem, value);
-                    }
+                for (const query of this.content.queries) {
+                    const value = this.$route.query[query.key];
+                    if (value) data[query.key] = value;
                 }
 
-                await axios.post(`${wwLib.wwApiRequests._getApiUrl()}/design/${wwLib.wwWebsiteData.getInfo().id}/form/${this.wwObject.content.data.config.id}/send`, data, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
-
-                //RUN JS
-                if (this.wwObject.content.data.config.js && this.wwObject.content.data.config.js.length) {
-                    try {
-                        eval(this.wwObject.content.data.config.js);
-                    } catch (error) {
-                        wwLib.wwLog.error('----------------------------');
-                        wwLib.wwLog.error('Failed to execute custom JS.');
-                        wwLib.wwLog.error(this.wwObject.content.data.config.js);
-                        wwLib.wwLog.error('----------------------------');
-                        wwLib.wwLog.error(error);
-                    }
-                }
-
-                // REDIRECT
-                if (this.wwObject.content.data.config.redirect.enabled) {
-                    this.goToPage(this.wwObject.content.data.config.redirect.linkPage);
-                }
-
-                // CHANGE STATUS
-                this.successStatus();
-            } catch (err) {
-                // CHANGE STATUS
-                this.errorStatus();
-                wwLib.wwLog.error('ERROR:', err);
-            }
-        },
-        /* wwManager:start */
-        add(list, options) {
-            try {
-                list.splice(options.index, 0, options.wwObject);
-                this.wwObjectCtrl.update(this.wwObject);
-            } catch (error) {
-                wwLib.wwLog.error('ERROR : ', error);
-            }
-        },
-        remove(list, options) {
-            try {
-                list.splice(options.index, 1);
-                this.wwObjectCtrl.update(this.wwObject);
-            } catch (error) {
-                wwLib.wwLog.error('ERROR:', error);
-            }
-        },
-        async options() {
-            try {
-                const config = await this.getFormConfig();
-                const options = {
-                    firstPage: 'WW_FORM_SECURE_OPTIONS',
+                // REQUEST
+                await axios({
+                    method: this.content.method,
+                    url: this.content.url,
                     data: {
-                        wwObject: this.wwObject,
-                        config: config || {}
-                    }
-                };
-
-                const result = await wwLib.wwPopups.open(options);
-                wwLib.wwObjectHover.setLock(this);
-
-                if (typeof result.config != 'undefined') {
-                    this.wwObject.content.data.config.type = result.config.type;
-
-                    if (result.config.type === 'weweb-email') {
-                        this.wwObject.content.data.config.recipients = result.config.recipients;
-                        this.wwObject.content.data.config.color = result.config.color;
-                    } else {
-                        delete this.wwObject.content.data.config.recipients;
-                        delete this.wwObject.content.data.config.color;
-                    }
-
-                    this.wwObject.content.data.config.name = result.config.name;
-                    this.wwObject.content.data.config.autocomplete = result.config.autocomplete;
-                    this.wwObject.content.data.config.redirect = result.config.redirect;
-                    this.wwObject.content.data.config.queryVar = result.config.queryVar;
-                    this.wwObject.content.data.config.js = result.config.js;
-
-                    const { method, action, hiddenData, headers } = result.config;
-                    if (!this.wwObject.content.data.config.id) {
-                        await this.createFormConfig(method, action, hiddenData, headers);
-                    } else {
-                        await this.updateFormConfig(method, action, hiddenData, headers);
-                    }
-                }
-                if (typeof result.id != 'undefined') {
-                    this.wwObject.content.data.id = result.id;
-                }
-                if (typeof result.class != 'undefined') {
-                    this.wwObject.content.data.class = result.class;
-                }
-                this.wwObjectCtrl.update(this.wwObject);
-                this.wwObjectCtrl.globalEdit(result);
-            } catch (err) {
-                wwLib.wwLog.error('ERROR', err);
-            }
-            wwLib.wwObjectHover.removeLock();
-        },
-        async getFormConfig() {
-            try {
-                if (!this.wwObject.content.data.config.id) return;
-                const result = await wwLib.$apollo.query({
-                    query: GET_FORM_CONFIG,
-                    variables: {
-                        designId: parseInt(await wwLib.$store.getters['websiteData/getDesignInfo'].id),
-                        formConfigId: this.wwObject.content.data.config.id
+                        ...this.getDataWeWebEmail(),
+                        ...this.content.data.reduce((dataObj, elem) => {
+                            return { ...dataObj, [elem.key]: elem.value };
+                        }, {}),
+                        ...data,
                     },
-                    fetchPolicy: 'no-cache'
+                    headers: this.content.headers.reduce((headersObj, elem) => {
+                        return { ...headersObj, [elem.key]: elem.value };
+                    }, {}),
                 });
-                if (!result) throw new Error('ERROR_GET_FORM_CONFIG');
-                return result.data.getFormConfig;
-            } catch (err) {
-                wwLib.wwLog.error(err);
-            }
-        },
-        async createFormConfig(method, url, data, headers) {
-            try {
-                const result = await wwLib.$apollo.mutate({
-                    mutation: CREATE_FORM_CONFIG,
-                    fetchPolicy: 'no-cache',
-                    variables: {
-                        designId: parseInt(await wwLib.$store.getters['websiteData/getDesignInfo'].id),
-                        method,
-                        url,
-                        data,
-                        headers
-                    }
-                });
-                if (!result) throw new Error('ERROR_CREATE_FORM_CONFIG');
 
-                this.wwObject.content.data.config.id = result.data.createFormConfig.id;
+                // CHANGE STATUS
+                this.$emit('update', { state: 'success' });
             } catch (err) {
+                // CHANGE STATUS
+                this.$emit('update', { state: 'error' });
                 wwLib.wwLog.error(err);
             }
         },
-        async updateFormConfig(method, url, data, headers) {
-            try {
-                const result = await wwLib.$apollo.mutate({
-                    mutation: UPDATE_FORM_CONFIG,
-                    variables: {
-                        designId: parseInt(await wwLib.$store.getters['websiteData/getDesignInfo'].id),
-                        formConfigId: this.wwObject.content.data.config.id,
-                        method,
-                        url,
-                        data,
-                        headers
-                    },
-                    fetchPolicy: 'no-cache'
-                });
-                if (!result) throw new Error('ERROR_UPDATE_FORM_CONFIG');
-            } catch (err) {
-                wwLib.wwLog.error(err);
-            }
-        }
-        /* wwManager:end */
-    }
+    },
 };
 </script>
 
 <style lang="scss" scoped>
-.ww-form {
-    form {
-        width: 100%;
+.ww-form-container {
+    /* wwEditor:start */
+    &.odd {
+        --ww-editor-color: var(--ww-color-green-500);
     }
+    &.even {
+        --ww-editor-color: var(--ww-color-blue-500);
+    }
+    /* wwEditor:end */
     position: relative;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    min-width: 50px;
-    min-height: 25px;
-    /* wwManager:start */
-    .ww-orange-button {
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translate(-50%, -50%);
-        z-index: 1;
+    box-sizing: border-box;
+    &.loading {
+        button[type='submit'] {
+            pointer-events: none;
+        }
     }
-    .ww-form-status {
+    &__content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        &.-normal {
+            transition: all 0.3s ease;
+            transition-delay: 0.3s;
+            &.hidden {
+                opacity: 0;
+                visibility: hidden;
+                transition-delay: 0s;
+            }
+        }
+        &.-success {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+            transition-delay: 0.3s;
+            &.hidden {
+                opacity: 0;
+                transition-delay: 0s;
+                visibility: hidden;
+            }
+        }
+    }
+    /* wwEditor:start */
+    &__status {
         position: absolute;
-        top: 0;
-        left: 20px;
-        transform: translate(0%, -50%);
-        z-index: 1;
-        color: white;
-        padding: 2px 5px;
-        border-radius: 2px;
-        font-size: 12px;
-        background-image: linear-gradient(90deg, #2e85c2, #1763a9);
+        top: -1px;
+        color: var(--ww-color-white);
+        padding: var(--ww-spacing-00) var(--ww-spacing-01);
+        border-radius: var(--ww-spacing-00);
+        background-color: var(--ww-color-blue-500);
+        z-index: 101;
+        opacity: 0;
+        pointer-events: none;
+        right: -1px;
         &.error {
-            background: linear-gradient(90deg, #e02a4d 0, #ce003b);
+            background-color: var(--ww-color-red-500);
         }
         &.success {
-            background-image: linear-gradient(90deg, #49b9b3, #19947c);
+            background-color: var(--ww-color-green-500);
         }
         &.loading {
-            background: linear-gradient(90deg, #ea5e1c 0, #ef811a);
+            background-color: var(--ww-color-yellow-500);
         }
     }
-    /* wwManager:end */
+    &.selected {
+        > .ww-form-container__status {
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
+    &.editing:hover {
+        & > .border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid var(--ww-editor-color);
+            pointer-events: none;
+            z-index: 10;
+        }
+        > .ww-form-container__menu {
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
+    &__menu {
+        display: flex;
+        position: absolute;
+        top: 0;
+        border-radius: 100%;
+        padding: var(--ww-spacing-01);
+        transition: opacity 0.2s ease;
+        z-index: 101;
+        cursor: pointer;
+        background-color: var(--ww-editor-color);
+        color: white;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        &:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 30px;
+            height: 30px;
+        }
+        &.right {
+            right: 0;
+            transform: translate(50%, -50%);
+        }
+        &.left {
+            left: 0;
+            transform: translate(-50%, -50%);
+        }
+    }
+    /* wwEditor:end */
 }
 </style>

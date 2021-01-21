@@ -1,29 +1,25 @@
 {
-    "name": "ww_form_container_secure",
-    "type": "wwObject",
-    "wewebPublic": "true",
+    "name": "ww-form-container",
     "repository": {
         "type": "git",
-        "url": "https://github.com/WeWeb-Public/ww-form-container-secure"
+        "url": "https://github.com/weweb-assets/ww-form-container"
     },
-    "version": "0.0.4",
-    "private": true,
+    "version": "1.0.0",
     "scripts": {
-        "build": "weweb-build",
-        "serve": "weweb-serve",
-        "create-config": "weweb-config"
+        "build": "weweb build",
+        "serve": "weweb serve"
     },
     "dependencies": {
-        "graphql": "^14.7.0",
-        "graphql-tag": "^2.10.3",
-        "vue": "2.6.11"
+        "vue": "2.6.12"
     },
     "devDependencies": {
-        "weweb-client": "latest"
+        "@vue/eslint-config-prettier": "^6.0.0",
+        "@weweb/cli": "latest",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^7.10.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "eslint-plugin-vue": "^6.2.2",
+        "prettier": "^2.1.2"
     },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "not ie <= 8"
-    ]
+    "license": "MIT"
 }
