@@ -6,7 +6,7 @@
         class="ww-form-container"
         :class="[content.state, level % 2 === 0 ? 'odd' : 'even', { editing: isEditing, selected: isSelected }]"
     >
-        <div style="position: relative">
+        <div class="ww-form-container__relative">
             <wwLayout
                 :class="{ hidden: content.state === 'success' }"
                 class="ww-form-container__content -normal"
@@ -278,12 +278,14 @@ export default {
         --ww-editor-color: var(--ww-color-blue-500);
     }
     /* wwEditor:end */
-    position: relative;
     box-sizing: border-box;
     &.loading {
         button[type='submit'] {
             pointer-events: none;
         }
+    }
+    &__relative {
+        position: relative;
     }
     &__content {
         display: flex;
