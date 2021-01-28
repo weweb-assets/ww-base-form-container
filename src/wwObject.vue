@@ -4,27 +4,27 @@
         :autocomplete="content.autocomplete"
         @submit.prevent="submit"
         class="ww-form-container"
-        :class="[content.state, level % 2 === 0 ? 'odd' : 'even', { editing: isEditing, selected: isSelected }]"
+        :class="[formState, { editing: isEditing, selected: isSelected }]"
     >
         <div class="ww-form-container__relative">
             <wwLayout
-                :class="{ hidden: content.state === 'success' }"
+                :class="{ hidden: formState === 'success' }"
                 class="ww-form-container__content -normal"
                 path="content"
             />
             <wwLayout
-                :class="{ hidden: content.state !== 'success' }"
+                :class="{ hidden: formState !== 'success' }"
                 class="ww-form-container__content -success"
                 path="successContent"
             />
-            <wwLayout v-if="content.state === 'error'" class="ww-form-container__content -error" path="errorContent" />
+            <wwLayout v-if="formState === 'error'" class="ww-form-container__content -error" path="errorContent" />
         </div>
 
         <!-- wwEditor:start -->
-        <div class="ww-form-container__status label-xs" :class="content.state">
-            {{ content.state }}
+        <div class="ww-form-container__status label-xs" :class="formState">
+            {{ formState }}
         </div>
-        <div class="ww-form-container__menu" :class="level % 2 ? 'left' : 'right'">
+        <div class="ww-form-container__menu">
             <wwEditorIcon small name="form" />
         </div>
         <!-- wwEditor:end -->
@@ -158,6 +158,7 @@ export default {
     data() {
         return {
             designName: wwLib.wwWebsiteData.getWebsiteName(),
+            state: 'normal',
             /* wwEditor:start */
             designId: wwLib.wwWebsiteData.getInfo().id,
             apiUrl: wwLib.wwApiRequests._getApiUrl(),
@@ -181,6 +182,14 @@ export default {
             /* wwEditor:end */
             // eslint-disable-next-line no-unreachable
             return false;
+        },
+        formState() {
+            /* wwEditor:start */
+            return this.content.state;
+            /* wwEditor:end */
+            /* wwFront:start */
+            return this.state;
+            /* wwFront:end */
         },
     },
     /* wwEditor:start */
@@ -225,11 +234,19 @@ export default {
                 recipients: this.content.wewebEmail.recipients,
             };
         },
+        setState(state) {
+            /* wwEditor:start */
+            this.$emit('update', { state });
+            /* wwEditor:end */
+            /* wwFront:start */
+            this.state = state;
+            /* wwFront:end */
+        },
         async submit(form) {
             try {
-                if (this.content.state === 'success' || this.content.state === 'loading') return;
+                if (this.formState === 'success' || this.formState === 'loading') return;
 
-                this.$emit('update', { state: 'loading' });
+                this.setState('loading');
 
                 // INIT DATA
                 const data = {};
@@ -270,30 +287,24 @@ export default {
                 });
 
                 // CHANGE STATUS
-                this.$emit('update', { state: 'success' });
+                this.setState('success');
             } catch (err) {
                 // CHANGE STATUS
-                this.$emit('update', { state: 'error' });
+                this.setState('error');
                 wwLib.wwLog.error(err);
             }
         },
     },
     mounted() {
-        this.$emit('update', { state: 'normal' });
+        /* wwEditor:start */
+        this.setState('normal');
+        /* wwEditor:end */
     },
 };
 </script>
 
 <style lang="scss" scoped>
 .ww-form-container {
-    /* wwEditor:start */
-    &.odd {
-        --ww-editor-color: var(--ww-color-green-500);
-    }
-    &.even {
-        --ww-editor-color: var(--ww-color-blue-500);
-    }
-    /* wwEditor:end */
     box-sizing: border-box;
     &.loading {
         button[type='submit'] {
@@ -378,6 +389,8 @@ export default {
         display: flex;
         position: absolute;
         top: 0;
+        right: 0;
+        transform: translate(50%, -50%);
         border-radius: 100%;
         padding: var(--ww-spacing-01);
         transition: opacity 0.2s ease;
@@ -397,14 +410,6 @@ export default {
             transform: translate(-50%, -50%) rotate(45deg);
             width: 30px;
             height: 30px;
-        }
-        &.right {
-            right: 0;
-            transform: translate(50%, -50%);
-        }
-        &.left {
-            left: 0;
-            transform: translate(-50%, -50%);
         }
     }
     /* wwEditor:end */
