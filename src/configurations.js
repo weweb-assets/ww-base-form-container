@@ -1,7 +1,7 @@
 const WEWEB_EMAIL_SETTINGS = {
     recipients: {
         path: 'wewebEmail.recipients',
-        label: { en: 'Recipients', fr: 'fr' },
+        label: { en: 'Recipients', fr: 'Destinataires' },
         type: 'List',
         options: {
             options: [
@@ -17,10 +17,56 @@ const WEWEB_EMAIL_SETTINGS = {
     },
 };
 
+const ZAPIER_HOOK_SETTINGS = {
+    method: {
+        path: 'method',
+        label: { en: 'Type of request', fr: 'Type de requête' },
+        type: 'TextSelect',
+        options: {
+            options: [
+                { value: 'post', label: { en: 'POST', fr: 'POST' } },
+                { value: 'get', label: { en: 'GET', fr: 'GET' } },
+                { value: 'put', label: { en: 'PUT', fr: 'PUT' } },
+            ],
+        },
+    },
+    target: {
+        path: 'url',
+        label: { en: 'Target', fr: 'Cible' },
+        type: 'Text',
+        options: {
+            placeholder: 'https://hooks.zapier.com/...',
+        },
+    },
+    headers: {
+        path: 'headers',
+        label: { en: 'Request headers', fr: 'Entêtes de requête' },
+        type: 'List',
+        options: {
+            options: [
+                {
+                    path: 'key',
+                    type: 'Text',
+                    options: {
+                        placeholder: 'Key',
+                    },
+                },
+                {
+                    path: 'value',
+                    type: 'Text',
+                    options: {
+                        placeholder: 'Value',
+                    },
+                },
+            ],
+        },
+    },
+};
+
 const CUSTOM_REQUEST_SETTINGS = {
     method: {
         path: 'method',
-        label: { en: 'Type of request', fr: 'fr' },
+        label: { en: 'Type of request', fr: 'Type de requête' },
         type: 'TextSelect',
         options: {
             options: [
@@ -34,7 +80,7 @@ const CUSTOM_REQUEST_SETTINGS = {
     },
     target: {
         path: 'url',
-        label: { en: 'Target', fr: 'fr' },
+        label: { en: 'Target', fr: 'Cible' },
         type: 'Text',
         options: {
             placeholder: 'https://www...',
@@ -42,7 +88,7 @@ const CUSTOM_REQUEST_SETTINGS = {
     },
     headers: {
         path: 'headers',
-        label: { en: 'Request headers', fr: 'fr' },
+        label: { en: 'Request headers', fr: 'Entêtes de requête' },
         type: 'List',
         options: {
             options: [
@@ -69,6 +115,8 @@ export const getSettingsConfigurations = submitAction => {
     switch (submitAction) {
         case 'weweb-email':
             return WEWEB_EMAIL_SETTINGS;
+        case 'zapier-hook':
+            return ZAPIER_HOOK_SETTINGS;
         default:
             return CUSTOM_REQUEST_SETTINGS;
     }

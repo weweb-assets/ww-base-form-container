@@ -68,19 +68,19 @@ export default {
             settingsOptions: {
                 state: {
                     path: 'state',
-                    label: { en: 'Form state', fr: 'fr' },
+                    label: { en: 'Form state', fr: 'Status du form.' },
                     type: 'TextSelect',
                     options: {
                         options: [
-                            { value: 'normal', label: { en: 'Normal', fr: 'fr' } },
-                            { value: 'success', label: { en: 'Success', fr: 'fr' } },
-                            { value: 'error', label: { en: 'Error', fr: 'fr' } },
+                            { value: 'normal', label: { en: 'Normal', fr: 'Normal' } },
+                            { value: 'success', label: { en: 'Success', fr: 'Succès' } },
+                            { value: 'error', label: { en: 'Error', fr: 'Erreur' } },
                         ],
                     },
                 },
                 name: {
                     path: 'name',
-                    label: { en: 'Form name', fr: 'fr' },
+                    label: { en: 'Form name', fr: 'Nom du form.' },
                     type: 'Text',
                     options: {
                         placeholder: 'newsletter',
@@ -88,24 +88,25 @@ export default {
                 },
                 autocomplete: {
                     path: 'autocomplete',
-                    label: { en: 'Autocomplete', fr: 'fr' },
+                    label: { en: 'Autocomplete', fr: 'Autocomplétion' },
                     type: 'OnOff',
                 },
                 submitAction: {
                     path: 'submitAction',
-                    label: { en: 'Submit action', fr: 'fr' },
+                    label: { en: 'Submit action', fr: 'Action au submit' },
                     type: 'TextSelect',
                     options: {
                         options: [
-                            { value: 'custom-request', label: { en: 'Custom request', fr: 'fr' } },
-                            { value: 'weweb-email', label: { en: 'WeWeb email', fr: 'fr' } },
+                            { value: 'custom-request', label: { en: 'Custom request', fr: 'Requête person.' } },
+                            { value: 'weweb-email', label: { en: 'WeWeb email', fr: 'Email WeWeb' } },
+                            { value: 'zapier-hook', label: { en: 'Zapier Hook', fr: 'Hook Zapier' } },
                         ],
                     },
                 },
                 ...getSettingsConfigurations(content.submitAction),
                 data: {
                     path: 'data',
-                    label: { en: 'Hidden input', fr: 'fr' },
+                    label: { en: 'Hidden input', fr: 'Input caché' },
                     type: 'List',
                     options: {
                         options: [
@@ -128,7 +129,7 @@ export default {
                 },
                 query: {
                     path: 'queries',
-                    label: { en: 'Query var', fr: 'fr' },
+                    label: { en: 'Query var', fr: 'Variable de query' },
                     type: 'List',
                     options: {
                         options: [
@@ -204,6 +205,14 @@ export default {
                         wewebEmail: {},
                     });
                     break;
+                case 'zapier-hook':
+                    this.$emit('update', {
+                        method: 'post',
+                        url: '',
+                        headers: [],
+                        wewebEmail: {},
+                    });
+                    break;
             }
         },
     },
@@ -237,7 +246,14 @@ export default {
                     const value = this.$route.query[query.key];
                     if (value) data[query.key] = value;
                 }
-                console.log(this.content);
+
+                const headers = this.content.headers.reduce((headersObj, elem) => {
+                    return { ...headersObj, [elem.key]: elem.value };
+                }, {});
+
+                if (this.content.submitAction === 'zapier-hook') {
+                    headers['Content-Type'] = headers['Content-Type'] || 'application/x-www-form-urlencoded';
+                }
 
                 // REQUEST
                 await axios({
@@ -250,9 +266,7 @@ export default {
                         }, {}),
                         ...data,
                     },
-                    headers: this.content.headers.reduce((headersObj, elem) => {
-                        return { ...headersObj, [elem.key]: elem.value };
-                    }, {}),
+                    headers,
                 });
 
                 // CHANGE STATUS

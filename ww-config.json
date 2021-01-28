@@ -18,13 +18,13 @@
         "settingsOptions": {
             "state": {
                 "path": "state",
-                "label": { "en": "Form state", "fr": "fr" },
+                "label": { "en": "Form state", "fr": "Status du form." },
                 "type": "TextSelect",
                 "options": {
                     "options": [
-                        { "value": "normal", "label": { "en": "Normal", "fr": "fr" } },
-                        { "value": "success", "label": { "en": "Success", "fr": "fr" } },
-                        { "value": "error", "label": { "en": "Error", "fr": "fr" } }
+                        { "value": "normal", "label": { "en": "Normal", "fr": "Normal" } },
+                        { "value": "success", "label": { "en": "Success", "fr": "Succès" } },
+                        { "value": "error", "label": { "en": "Error", "fr": "Erreur" } }
                     ]
                 }
             }
