@@ -25,7 +25,7 @@
             {{ content.state }}
         </div>
         <div class="ww-form-container__menu" :class="level % 2 ? 'left' : 'right'">
-            <wwEditorIcon small name="config" />
+            <wwEditorIcon small name="form" />
         </div>
         <!-- wwEditor:end -->
     </form>
@@ -103,8 +103,6 @@ export default {
                     },
                 },
                 ...getSettingsConfigurations(content.submitAction),
-            },
-            advancedOptions: {
                 data: {
                     path: 'data',
                     label: { en: 'Hidden input', fr: 'fr' },
@@ -264,6 +262,9 @@ export default {
                 wwLib.wwLog.error(err);
             }
         },
+    },
+    mounted() {
+        this.$emit('update', { state: 'normal' });
     },
 };
 </script>
