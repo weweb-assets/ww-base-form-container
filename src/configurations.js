@@ -33,7 +33,7 @@ const CUSTOM_REQUEST_SETTINGS = {
         },
     },
     target: {
-        path: 'target',
+        path: 'url',
         label: { en: 'Target', fr: 'fr' },
         type: 'Text',
         options: {

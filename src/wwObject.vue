@@ -237,6 +237,7 @@ export default {
                     const value = this.$route.query[query.key];
                     if (value) data[query.key] = value;
                 }
+                console.log(this.content);
 
                 // REQUEST
                 await axios({
