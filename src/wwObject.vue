@@ -25,7 +25,7 @@
             {{ formState }}
         </div>
         <div class="ww-form-container__menu">
-            <wwEditorIcon small name="form" />
+            <wwEditorIcon small name="editor" />
         </div>
         <!-- wwEditor:end -->
     </form>
@@ -396,7 +396,7 @@ export default {
         transition: opacity 0.2s ease;
         z-index: 101;
         cursor: pointer;
-        background-color: var(--ww-editor-color);
+        background-color: var(--ww-color-green-500);
         color: white;
         justify-content: center;
         align-items: center;
