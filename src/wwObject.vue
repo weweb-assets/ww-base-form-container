@@ -388,8 +388,8 @@ export default {
     &__menu {
         display: flex;
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 5px;
+        left: 0;
         transform: translate(50%, -50%);
         border-radius: 100%;
         padding: var(--ww-spacing-01);
