@@ -390,7 +390,7 @@ export default {
         position: absolute;
         top: 5px;
         left: 0;
-        transform: translate(50%, -50%);
+        transform: translate(-50%, -50%);
         border-radius: 100%;
         padding: var(--ww-spacing-01);
         transition: opacity 0.2s ease;
