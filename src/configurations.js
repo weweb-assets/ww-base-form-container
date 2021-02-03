@@ -63,6 +63,33 @@ const ZAPIER_HOOK_SETTINGS = {
     },
 };
 
+const AIRTABLE_SETTINGS = {
+    airtableApiKey: {
+        path: 'airtable.apiKey',
+        label: { en: 'Api key', fr: "Clée de l'api" },
+        type: 'Text',
+        options: {
+            placeholder: 'key',
+        },
+    },
+    airtableBaseKey: {
+        path: 'airtable.baseKey',
+        label: { en: 'Base key', fr: 'Clée de la base' },
+        type: 'Text',
+        options: {
+            placeholder: 'key',
+        },
+    },
+    airtableTableName: {
+        path: 'airtable.tableName',
+        label: { en: 'Table name', fr: 'Nom de la table' },
+        type: 'Text',
+        options: {
+            placeholder: 'Name',
+        },
+    },
+};
+
 const CUSTOM_REQUEST_SETTINGS = {
     method: {
         path: 'method',
@@ -117,7 +144,36 @@ export const getSettingsConfigurations = submitAction => {
             return WEWEB_EMAIL_SETTINGS;
         case 'zapier-hook':
             return ZAPIER_HOOK_SETTINGS;
+        case 'airtable':
+            return AIRTABLE_SETTINGS;
         default:
             return CUSTOM_REQUEST_SETTINGS;
+    }
+};
+
+const LINK_ACTION = {
+    link: {
+        path: 'afterSubmitAction.link',
+        label: { en: '', fr: '' },
+        type: 'Link',
+    },
+};
+
+const CUSTOM_SCRIPT_ACTION = {
+    customScript: {
+        path: 'afterSubmitAction.customScript',
+        label: { en: '', fr: '' },
+        type: 'Script',
+    },
+};
+
+export const getAfterActionSubmitConfigurations = afterActionSubmit => {
+    switch (afterActionSubmit) {
+        case 'link':
+            return LINK_ACTION;
+        case 'custom-script':
+            return CUSTOM_SCRIPT_ACTION;
+        default:
+            return {};
     }
 };

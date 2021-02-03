@@ -6,6 +6,8 @@
         class="ww-form-container"
         :class="[formState, { editing: isEditing, selected: isSelected }]"
     >
+        <wwLink v-show="false" ref="link" :ww-link="content.afterSubmitAction.link" />
+
         <div class="ww-form-container__relative">
             <wwLayout
                 :class="{ hidden: formState === 'success' }"
@@ -33,7 +35,7 @@
 
 <script>
 /* wwEditor:start */
-import { getSettingsConfigurations } from './configurations';
+import { getSettingsConfigurations, getAfterActionSubmitConfigurations } from './configurations';
 /* wwEditor:end */
 
 export default {
@@ -61,6 +63,12 @@ export default {
         headers: [],
         queries: [],
         wewebEmail: {},
+        airtable: {},
+        afterSubmitAction: {
+            type: 'none',
+            link: {},
+            customScript: {},
+        },
     },
     /* wwEditor:start */
     wwEditorConfiguration({ content }) {
@@ -100,6 +108,7 @@ export default {
                             { value: 'custom-request', label: { en: 'Custom request', fr: 'Requête person.' } },
                             { value: 'weweb-email', label: { en: 'WeWeb email', fr: 'Email WeWeb' } },
                             { value: 'zapier-hook', label: { en: 'Zapier Hook', fr: 'Hook Zapier' } },
+                            { value: 'airtable', label: { en: 'Airtable', fr: 'Airtable' } },
                         ],
                     },
                 },
@@ -143,18 +152,23 @@ export default {
                         ],
                     },
                 },
+                afterSubmitAction: {
+                    path: 'afterSubmitAction.type',
+                    label: { en: 'Action after submit', fr: 'Action après le submit' },
+                    type: 'TextSelect',
+                    options: {
+                        options: [
+                            { value: 'none', label: { en: 'None', fr: 'Aucune' } },
+                            { value: 'link', label: { en: 'Link', fr: 'Link' } },
+                            { value: 'custom-script', label: { en: 'Custom script', fr: 'Script custom' } },
+                        ],
+                    },
+                },
+                ...getAfterActionSubmitConfigurations(content.afterSubmitAction.type),
             },
         };
     },
     /* wwEditor:end */
-    inject: {
-        parentLevel: { from: 'level', default: 0 },
-    },
-    provide() {
-        return {
-            level: this.level,
-        };
-    },
     data() {
         return {
             designName: wwLib.wwWebsiteData.getWebsiteName(),
@@ -166,12 +180,9 @@ export default {
         };
     },
     computed: {
-        level() {
-            return this.parentLevel + 1;
-        },
         isEditing() {
             /* wwEditor:start */
-            return this.wwEditorState.editMode === wwLib.wwSectionHelper.EDIT_MODES.CONTENT;
+            return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION;
             /* wwEditor:end */
             // eslint-disable-next-line no-unreachable
             return false;
@@ -188,6 +199,7 @@ export default {
             return this.content.state;
             /* wwEditor:end */
             /* wwFront:start */
+            // eslint-disable-next-line no-unreachable
             return this.state;
             /* wwFront:end */
         },
@@ -197,7 +209,7 @@ export default {
         'content.submitAction'() {
             switch (this.content.submitAction) {
                 case 'weweb-email':
-                    this.$emit('update', {
+                    return this.$emit('update', {
                         method: 'post',
                         url: `${this.apiUrl}/design/${this.designId}/form/email`,
                         headers: [],
@@ -205,35 +217,89 @@ export default {
                             recipients: [{ email: wwLib.$store.getters['manager/getUser'].email }],
                         },
                     });
-                    break;
                 case 'custom-request':
-                    this.$emit('update', {
+                    return this.$emit('update', {
                         method: 'post',
                         url: '',
                         headers: [],
                         wewebEmail: {},
                     });
-                    break;
                 case 'zapier-hook':
-                    this.$emit('update', {
+                    return this.$emit('update', {
                         method: 'post',
                         url: '',
-                        headers: [],
+                        headers: [{ key: 'Content-Type', value: 'application/x-www-form-urlencoded' }],
                         wewebEmail: {},
+                    });
+                case 'airtable':
+                    return this.$emit('update', {
+                        method: 'post',
+                        url: '',
+                        headers: [
+                            { key: 'Content-Type', value: 'application/json' },
+                            { key: 'Authorization', value: `Bearer ${this.content.airtable.apiKey}` },
+                        ],
+                        wewebEmail: {},
+                    });
+            }
+        },
+        'content.afterSubmitAction.type'() {
+            switch (this.content.afterSubmitAction.type) {
+                case 'none':
+                    this.$emit('update', {
+                        afterSubmitAction: {
+                            type: 'none',
+                            link: {},
+                            customScript: {},
+                        },
+                    });
+                    break;
+                case 'link':
+                    this.$emit('update', {
+                        afterSubmitAction: {
+                            type: 'link',
+                            link: {
+                                type: 'internal',
+                                pageId: wwLib.$store.getters['websiteData/getPageId'],
+                                sectionId: null,
+                                targetBlank: false,
+                            },
+                            customScript: {},
+                        },
+                    });
+                    break;
+                case 'custom-script':
+                    this.$emit('update', {
+                        afterSubmitAction: {
+                            type: 'custom-script',
+                            link: {},
+                            customScript: {},
+                        },
                     });
                     break;
             }
         },
+        'content.airtable.apiKey'() {
+            this.$emit('update', {
+                headers: [
+                    { key: 'Content-Type', value: 'application/json' },
+                    { key: 'Authorization', value: `Bearer ${this.content.airtable.apiKey}` },
+                ],
+            });
+        },
+        'content.airtable.baseKey'() {
+            this.$emit('update', {
+                url: `https://api.airtable.com/v0/${this.content.airtable.baseKey}/${this.content.airtable.tableName}`,
+            });
+        },
+        'content.airtable.tableName'() {
+            this.$emit('update', {
+                url: `https://api.airtable.com/v0/${this.content.airtable.baseKey}/${this.content.airtable.tableName}`,
+            });
+        },
     },
     /* wwEditor:end */
     methods: {
-        getDataWeWebEmail() {
-            if (this.content.submitAction !== 'weweb-email') return {};
-            return {
-                designName: this.designName,
-                recipients: this.content.wewebEmail.recipients,
-            };
-        },
         setState(state) {
             /* wwEditor:start */
             this.$emit('update', { state });
@@ -241,6 +307,20 @@ export default {
             /* wwFront:start */
             this.state = state;
             /* wwFront:end */
+        },
+        getComputedData(data) {
+            switch (this.content.submitAction) {
+                case 'weweb-email':
+                    return {
+                        designName: this.designName,
+                        recipients: this.content.wewebEmail.recipients,
+                        ...data,
+                    };
+                case 'airtable':
+                    return { records: [{ fields: data }] };
+                default:
+                    return data;
+            }
         },
         async submit(form) {
             try {
@@ -254,7 +334,7 @@ export default {
                 // ADD DATA REQUEST
                 for (const elem of form.srcElement.elements) {
                     if (elem.nodeName === 'INPUT' || elem.nodeName === 'TEXTAREA' || elem.nodeName === 'SELECT') {
-                        data[elem.name] = elem.value;
+                        data[elem.name] = elem.type === 'number' ? parseFloat(elem.value) : elem.value;
                     }
                 }
 
@@ -268,23 +348,20 @@ export default {
                     return { ...headersObj, [elem.key]: elem.value };
                 }, {});
 
-                if (this.content.submitAction === 'zapier-hook') {
-                    headers['Content-Type'] = headers['Content-Type'] || 'application/x-www-form-urlencoded';
-                }
-
                 // REQUEST
                 await axios({
                     method: this.content.method,
                     url: this.content.url,
                     data: {
-                        ...this.getDataWeWebEmail(),
                         ...this.content.data.reduce((dataObj, elem) => {
                             return { ...dataObj, [elem.key]: elem.value };
                         }, {}),
-                        ...data,
+                        ...this.getComputedData(data),
                     },
                     headers,
                 });
+
+                this.afterSubmitAction();
 
                 // CHANGE STATUS
                 this.setState('success');
@@ -292,6 +369,14 @@ export default {
                 // CHANGE STATUS
                 this.setState('error');
                 wwLib.wwLog.error(err);
+            }
+        },
+        async afterSubmitAction() {
+            switch (this.content.afterSubmitAction.type) {
+                case 'link':
+                    return this.$refs.link.$el.click();
+                case 'custom-script':
+                    return eval(this.content.afterSubmitAction.customScript.code);
             }
         },
     },
@@ -397,7 +482,7 @@ export default {
         z-index: 101;
         cursor: pointer;
         background-color: var(--ww-color-green-500);
-        color: white;
+        color: var(--ww-color-white);
         justify-content: center;
         align-items: center;
         opacity: 0;
