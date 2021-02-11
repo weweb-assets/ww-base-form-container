@@ -334,7 +334,17 @@ export default {
                 // ADD DATA REQUEST
                 for (const elem of form.srcElement.elements) {
                     if (elem.nodeName === 'INPUT' || elem.nodeName === 'TEXTAREA' || elem.nodeName === 'SELECT') {
-                        data[elem.name] = elem.type === 'number' ? parseFloat(elem.value) : elem.value;
+                        switch (elem.type) {
+                            case 'number':
+                                data[elem.name] = parseFloat(elem.value);
+                                break;
+                            case 'date':
+                                data[elem.name] = new Date(elem.value).toUTCString();
+                                break;
+                            default:
+                                data[elem.name] = elem.value;
+                                break;
+                        }
                     }
                 }
 
