@@ -324,6 +324,11 @@ export default {
         },
         async submit(form) {
             try {
+                /* wwEditor:start */
+                if (this.isEditing) {
+                    return false;
+                }
+                /* wwEditor:end */
                 if (this.formState === 'success' || this.formState === 'loading') return;
 
                 this.setState('loading');
