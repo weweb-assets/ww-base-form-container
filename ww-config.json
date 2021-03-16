@@ -7,13 +7,9 @@
             "en": "Form Container"
         },
         "menuOptions": {
-            "items": [
-                {
-                    "name": "State",
-                    "quick": [{ "type": "custom-settings", "name": "state" }],
-                    "icon": "config"
-                }
-            ]
+            "quick": {
+                "sections": ["state"]
+            }
         },
         "settingsOptions": {
             "state": {
