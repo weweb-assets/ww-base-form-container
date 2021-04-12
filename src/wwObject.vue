@@ -302,7 +302,7 @@ export default {
     methods: {
         setState(state) {
             /* wwEditor:start */
-            this.$emit('update', { state });
+            this.$emit('update-forced', { state });
             /* wwEditor:end */
             /* wwFront:start */
             this.state = state;
