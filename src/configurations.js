@@ -152,7 +152,7 @@ export const getSettingsConfigurations = submitAction => {
 };
 
 const LINK_ACTION = {
-    link: {
+    linkSubmit: {
         path: 'afterSubmitAction.link',
         label: { en: '', fr: '' },
         type: 'Link',
@@ -160,7 +160,7 @@ const LINK_ACTION = {
 };
 
 const CUSTOM_SCRIPT_ACTION = {
-    customScript: {
+    customScriptSubmit: {
         path: 'afterSubmitAction.customScript',
         label: { en: '', fr: '' },
         type: 'Script',
@@ -173,6 +173,32 @@ export const getAfterActionSubmitConfigurations = afterActionSubmit => {
             return LINK_ACTION;
         case 'custom-script':
             return CUSTOM_SCRIPT_ACTION;
+        default:
+            return {};
+    }
+};
+
+const LINK_ERROR = {
+    linkError: {
+        path: 'afterErrorAction.link',
+        label: { en: '', fr: '' },
+        type: 'Link',
+    },
+};
+
+const CUSTOM_SCRIPT_ERROR = {
+    customScriptError: {
+        path: 'afterErrorAction.customScript',
+        label: { en: '', fr: '' },
+        type: 'Script',
+    },
+};
+export const getAfterActionErrorConfigurations = afterActionError => {
+    switch (afterActionError) {
+        case 'link':
+            return LINK_ERROR;
+        case 'custom-script':
+            return CUSTOM_SCRIPT_ERROR;
         default:
             return {};
     }

@@ -35,7 +35,11 @@
 
 <script>
 /* wwEditor:start */
-import { getSettingsConfigurations, getAfterActionSubmitConfigurations } from './configurations';
+import {
+    getSettingsConfigurations,
+    getAfterActionSubmitConfigurations,
+    getAfterActionErrorConfigurations,
+} from './configurations';
 /* wwEditor:end */
 
 export default {
@@ -65,6 +69,11 @@ export default {
         wewebEmail: {},
         airtable: {},
         afterSubmitAction: {
+            type: 'none',
+            link: {},
+            customScript: {},
+        },
+        afterErrorAction: {
             type: 'none',
             link: {},
             customScript: {},
@@ -165,6 +174,19 @@ export default {
                     },
                 },
                 ...getAfterActionSubmitConfigurations(content.afterSubmitAction.type),
+                afterErrorAction: {
+                    path: 'afterErrorAction.type',
+                    label: { en: 'Action after error', fr: 'Action après une erreur' },
+                    type: 'TextSelect',
+                    options: {
+                        options: [
+                            { value: 'none', label: { en: 'None', fr: 'Aucune' } },
+                            { value: 'link', label: { en: 'Link', fr: 'Link' } },
+                            { value: 'custom-script', label: { en: 'Custom script', fr: 'Script custom' } },
+                        ],
+                    },
+                },
+                ...getAfterActionErrorConfigurations(content.afterErrorAction.type),
             },
         };
     },
@@ -279,6 +301,42 @@ export default {
                     break;
             }
         },
+        'content.afterErrorAction.type'() {
+            switch (this.content.afterErrorAction.type) {
+                case 'none':
+                    this.$emit('update', {
+                        afterErrorAction: {
+                            type: 'none',
+                            link: {},
+                            customScript: {},
+                        },
+                    });
+                    break;
+                case 'link':
+                    this.$emit('update', {
+                        afterErrorAction: {
+                            type: 'link',
+                            link: {
+                                type: 'internal',
+                                pageId: wwLib.$store.getters['websiteData/getPageId'],
+                                sectionId: null,
+                                targetBlank: false,
+                            },
+                            customScript: {},
+                        },
+                    });
+                    break;
+                case 'custom-script':
+                    this.$emit('update', {
+                        afterErrorAction: {
+                            type: 'custom-script',
+                            link: {},
+                            customScript: {},
+                        },
+                    });
+                    break;
+            }
+        },
         'content.airtable.apiKey'() {
             this.$emit('update', {
                 headers: [
@@ -383,6 +441,9 @@ export default {
             } catch (err) {
                 // CHANGE STATUS
                 this.setState('error');
+
+                this.afterErrorAction();
+
                 wwLib.wwLog.error(err);
             }
         },
@@ -392,6 +453,14 @@ export default {
                     return this.$refs.link.$el.click();
                 case 'custom-script':
                     return eval(this.content.afterSubmitAction.customScript.code);
+            }
+        },
+        async afterErrorAction() {
+            switch (this.content.afterErrorAction.type) {
+                case 'link':
+                    return this.$refs.link.$el.click();
+                case 'custom-script':
+                    return eval(this.content.afterErrorAction.customScript.code);
             }
         },
     },
