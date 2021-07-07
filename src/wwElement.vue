@@ -52,11 +52,11 @@ export default {
     emits: ['update:content', 'update-forced'],
     wwDefaultContent: {
         content: [
-            { isWwObject: true, type: 'ww-form-input' },
-            { isWwObject: true, type: 'ww-button' },
+            { iswwElement: true, type: 'ww-form-input' },
+            { iswwElement: true, type: 'ww-button' },
         ],
-        successContent: [{ isWwObject: true, type: 'ww-text' }],
-        errorContent: [{ isWwObject: true, type: 'ww-text' }],
+        successContent: [{ iswwElement: true, type: 'ww-text' }],
+        errorContent: [{ iswwElement: true, type: 'ww-text' }],
         state: 'normal',
         name: '',
         autocomplete: true,
