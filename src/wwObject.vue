@@ -2,9 +2,9 @@
     <form
         :name="content.name"
         :autocomplete="content.autocomplete"
-        @submit.prevent="submit"
         class="ww-form-container"
         :class="[formState, { editing: isEditing, selected: isSelected }]"
+        @submit.prevent="submit"
     >
         <wwLink v-show="false" ref="link" :ww-link="content.afterSubmitAction.link" />
 
@@ -43,13 +43,13 @@ import {
 /* wwEditor:end */
 
 export default {
-    name: '__COMPONENT_NAME__',
     props: {
-        content: Object,
+        content: { type: Object, required: true },
         /* wwEditor:start */
-        wwEditorState: Object,
+        wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
     },
+    emits: ['update:content', 'update-forced'],
     wwDefaultContent: {
         content: [
             { isWwObject: true, type: 'ww-form-input' },
@@ -231,7 +231,7 @@ export default {
         'content.submitAction'() {
             switch (this.content.submitAction) {
                 case 'weweb-email':
-                    return this.$emit('update', {
+                    return this.$emit('update:content', {
                         method: 'post',
                         url: `${this.apiUrl}/design/${this.designId}/form/email`,
                         headers: [],
@@ -240,21 +240,21 @@ export default {
                         },
                     });
                 case 'custom-request':
-                    return this.$emit('update', {
+                    return this.$emit('update:content', {
                         method: 'post',
                         url: '',
                         headers: [],
                         wewebEmail: {},
                     });
                 case 'zapier-hook':
-                    return this.$emit('update', {
+                    return this.$emit('update:content', {
                         method: 'post',
                         url: '',
                         headers: [{ key: 'Content-Type', value: 'application/x-www-form-urlencoded' }],
                         wewebEmail: {},
                     });
                 case 'airtable':
-                    return this.$emit('update', {
+                    return this.$emit('update:content', {
                         method: 'post',
                         url: '',
                         headers: [
@@ -268,7 +268,7 @@ export default {
         'content.afterSubmitAction.type'() {
             switch (this.content.afterSubmitAction.type) {
                 case 'none':
-                    this.$emit('update', {
+                    this.$emit('update:content', {
                         afterSubmitAction: {
                             type: 'none',
                             link: {},
@@ -277,7 +277,7 @@ export default {
                     });
                     break;
                 case 'link':
-                    this.$emit('update', {
+                    this.$emit('update:content', {
                         afterSubmitAction: {
                             type: 'link',
                             link: {
@@ -291,7 +291,7 @@ export default {
                     });
                     break;
                 case 'custom-script':
-                    this.$emit('update', {
+                    this.$emit('update:content', {
                         afterSubmitAction: {
                             type: 'custom-script',
                             link: {},
@@ -304,7 +304,7 @@ export default {
         'content.afterErrorAction.type'() {
             switch (this.content.afterErrorAction.type) {
                 case 'none':
-                    this.$emit('update', {
+                    this.$emit('update:content', {
                         afterErrorAction: {
                             type: 'none',
                             link: {},
@@ -313,7 +313,7 @@ export default {
                     });
                     break;
                 case 'link':
-                    this.$emit('update', {
+                    this.$emit('update:content', {
                         afterErrorAction: {
                             type: 'link',
                             link: {
@@ -327,7 +327,7 @@ export default {
                     });
                     break;
                 case 'custom-script':
-                    this.$emit('update', {
+                    this.$emit('update:content', {
                         afterErrorAction: {
                             type: 'custom-script',
                             link: {},
@@ -338,7 +338,7 @@ export default {
             }
         },
         'content.airtable.apiKey'() {
-            this.$emit('update', {
+            this.$emit('update:content', {
                 headers: [
                     { key: 'Content-Type', value: 'application/json' },
                     { key: 'Authorization', value: `Bearer ${this.content.airtable.apiKey}` },
@@ -346,15 +346,20 @@ export default {
             });
         },
         'content.airtable.baseKey'() {
-            this.$emit('update', {
+            this.$emit('update:content', {
                 url: `https://api.airtable.com/v0/${this.content.airtable.baseKey}/${this.content.airtable.tableName}`,
             });
         },
         'content.airtable.tableName'() {
-            this.$emit('update', {
+            this.$emit('update:content', {
                 url: `https://api.airtable.com/v0/${this.content.airtable.baseKey}/${this.content.airtable.tableName}`,
             });
         },
+    },
+    mounted() {
+        /* wwEditor:start */
+        this.setState('normal');
+        /* wwEditor:end */
     },
     /* wwEditor:end */
     methods: {
@@ -463,11 +468,6 @@ export default {
                     return eval(this.content.afterErrorAction.customScript.code);
             }
         },
-    },
-    mounted() {
-        /* wwEditor:start */
-        this.setState('normal');
-        /* wwEditor:end */
     },
 };
 </script>
