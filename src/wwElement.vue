@@ -236,7 +236,7 @@ export default {
                         url: `${this.apiUrl}/design/${this.designId}/form/email`,
                         headers: [],
                         wewebEmail: {
-                            recipients: [{ email: wwLib.$store.getters['manager/getUser'].email }],
+                            recipients: [{ email: wwLib.wwEditorHelper.getUser().email }],
                         },
                     });
                 case 'custom-request':
@@ -282,7 +282,7 @@ export default {
                             type: 'link',
                             link: {
                                 type: 'internal',
-                                pageId: wwLib.$store.getters['websiteData/getPageId'],
+                                pageId: wwLib.wwWebsiteData.getCurrentPageId(),
                                 sectionId: null,
                                 targetBlank: false,
                             },
@@ -318,7 +318,7 @@ export default {
                             type: 'link',
                             link: {
                                 type: 'internal',
-                                pageId: wwLib.$store.getters['websiteData/getPageId'],
+                                pageId: wwLib.wwWebsiteData.getCurrentPageId(),
                                 sectionId: null,
                                 targetBlank: false,
                             },
