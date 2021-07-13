@@ -357,9 +357,7 @@ export default {
         },
     },
     mounted() {
-        /* wwEditor:start */
         this.setState('normal');
-        /* wwEditor:end */
     },
     /* wwEditor:end */
     methods: {
