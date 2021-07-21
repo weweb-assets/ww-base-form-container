@@ -412,6 +412,13 @@ export default {
                                 break;
                         }
                     }
+
+                    if (
+                        elem.classList.contains('g-recaptcha-response') &&
+                        wwLib.getFrontWindow().grecaptcha.getResponse() === ''
+                    ) {
+                        throw 'Error: Please complete the reCAPTCHA to continue.';
+                    }
                 }
 
                 // ADD QUERY VAR
