@@ -420,7 +420,8 @@ export default {
                     ) {
                         const errorMessage = wwLib.getFrontDocument().createElement('p');
                         errorMessage.innerHTML = 'Invalid reCAPTCHA. Please try again';
-                        errorMessage.style.color = 'red';
+                        errorMessage.style.color = '#ff0000';
+                        errorMessage.style.fontSize = '12px';
                         elem.parentNode.appendChild(errorMessage);
 
                         setTimeout(() => {
