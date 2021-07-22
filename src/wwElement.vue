@@ -1,6 +1,5 @@
 <template>
     <form
-        :key="remountKey"
         :name="content.name"
         :autocomplete="content.autocomplete"
         class="ww-form-container"
@@ -427,8 +426,7 @@ export default {
                         setTimeout(() => {
                             elem.parentNode.removeChild(errorMessage);
                         }, 8000);
-                        this.remountKey += 1;
-                        return false;
+                        throw new Error();
                     }
                 }
 
