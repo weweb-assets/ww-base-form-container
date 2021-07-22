@@ -1,5 +1,6 @@
 <template>
     <form
+        :key="remountKey"
         :name="content.name"
         :autocomplete="content.autocomplete"
         class="ww-form-container"
@@ -195,6 +196,7 @@ export default {
         return {
             designName: wwLib.wwWebsiteData.getWebsiteName(),
             state: 'normal',
+            remountKey: 0,
             /* wwEditor:start */
             designId: wwLib.wwWebsiteData.getInfo().id,
             apiUrl: wwLib.wwApiRequests._getApiUrl(),
@@ -425,6 +427,8 @@ export default {
                         setTimeout(() => {
                             elem.parentNode.removeChild(errorMessage);
                         }, 8000);
+                        wwLib.getFrontWindow().grecaptcha.reset();
+                        this.remountKey += 1;
                         return false;
                     }
                 }
