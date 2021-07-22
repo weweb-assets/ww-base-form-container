@@ -425,7 +425,7 @@ export default {
                         setTimeout(() => {
                             elem.parentNode.removeChild(errorMessage);
                         }, 8000);
-                        throw new Error();
+                        return false;
                     }
                 }
 
