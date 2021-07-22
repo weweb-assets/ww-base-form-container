@@ -412,6 +412,21 @@ export default {
                                 break;
                         }
                     }
+
+                    if (
+                        elem.classList.contains('g-recaptcha-response') &&
+                        wwLib.getFrontWindow().grecaptcha.getResponse() === ''
+                    ) {
+                        const errorMessage = wwLib.getFrontDocument().createElement('p');
+                        errorMessage.innerHTML = 'Invalid reCAPTCHA. Please try again';
+                        errorMessage.style.color = 'red';
+                        elem.parentNode.appendChild(errorMessage);
+
+                        setTimeout(() => {
+                            elem.parentNode.removeChild(errorMessage);
+                        }, 8000);
+                        return;
+                    }
                 }
 
                 // ADD QUERY VAR
