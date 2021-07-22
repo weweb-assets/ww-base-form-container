@@ -427,7 +427,6 @@ export default {
                         setTimeout(() => {
                             elem.parentNode.removeChild(errorMessage);
                         }, 8000);
-                        wwLib.getFrontWindow().grecaptcha.reset();
                         this.remountKey += 1;
                         return false;
                     }
