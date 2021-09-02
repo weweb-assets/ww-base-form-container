@@ -255,12 +255,13 @@ export default {
                         wewebEmail: {},
                     });
                 case 'airtable':
+                    const airtable = this.content.airtable || {};
                     return this.$emit('update:content', {
                         method: 'post',
-                        url: '',
+                        url: `https://api.airtable.com/v0/${airtable.baseKey}/${airtable.tableName}`,
                         headers: [
                             { key: 'Content-Type', value: 'application/json' },
-                            { key: 'Authorization', value: `Bearer ${this.content.airtable.apiKey}` },
+                            { key: 'Authorization', value: `Bearer ${airtable.apiKey}` },
                         ],
                         wewebEmail: {},
                     });
