@@ -387,19 +387,25 @@ export default {
         },
         async submit(form) {
             try {
+                console.log('START SUBMIT');
+                
                 /* wwEditor:start */
                 if (this.isEditing) {
                     return false;
                 }
                 /* wwEditor:end */
+                
+                console.log(this.formState);
                 if (this.formState === 'success' || this.formState === 'loading') return;
-
+                 
                 this.setState('loading');
 
                 // INIT DATA
                 const data = {};
 
                 // ADD DATA REQUEST
+                
+                console.log("SET FIELDS");
                 for (const elem of form.srcElement.elements) {
                     if (elem.nodeName === 'INPUT' || elem.nodeName === 'TEXTAREA' || elem.nodeName === 'SELECT') {
                         switch (elem.type) {
@@ -431,17 +437,31 @@ export default {
                         throw new Error();
                     }
                 }
-
+                
+                
+                console.log("ADD QUERY VAR");
                 // ADD QUERY VAR
                 for (const query of this.content.queries) {
                     const value = this.$route.query[query.key];
                     if (value) data[query.key] = value;
                 }
 
+                console.log("ADD HEADERS");
                 const headers = this.content.headers.reduce((headersObj, elem) => {
                     return { ...headersObj, [elem.key]: elem.value };
                 }, {});
 
+                console.log("REQUEST", {
+                    method: this.content.method,
+                    url: this.content.url,
+                    data: {
+                        ...this.content.data.reduce((dataObj, elem) => {
+                            return { ...dataObj, [elem.key]: elem.value };
+                        }, {}),
+                        ...this.getComputedData(data),
+                    },
+                    headers,
+                });
                 // REQUEST
                 await axios({
                     method: this.content.method,
@@ -455,11 +475,14 @@ export default {
                     headers,
                 });
 
+
+                console.log("AFTER SUBMIT");
                 this.afterSubmitAction();
 
                 // CHANGE STATUS
                 this.setState('success');
             } catch (err) {
+                console.log("ERROR", err);
                 // CHANGE STATUS
                 this.setState('error');
 
