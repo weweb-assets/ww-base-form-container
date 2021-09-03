@@ -386,22 +386,21 @@ export default {
             }
         },
         async submit(form) {
-            try {                
+            try {
                 /* wwEditor:start */
                 if (this.isEditing) {
                     return false;
                 }
                 /* wwEditor:end */
-                
+
                 if (this.formState === 'success' || this.formState === 'loading') return;
-                 
+
                 this.setState('loading');
 
                 // INIT DATA
                 const data = {};
 
                 // ADD DATA REQUEST
-                
                 for (const elem of form.srcElement.elements) {
                     if (elem.nodeName === 'INPUT' || elem.nodeName === 'TEXTAREA' || elem.nodeName === 'SELECT') {
                         switch (elem.type) {
@@ -410,6 +409,9 @@ export default {
                                 break;
                             case 'date':
                                 data[elem.name] = new Date(elem.value).toUTCString();
+                                break;
+                            case 'checkbox':
+                                data[elem.name] = elem.value === 'on' ? true : false;
                                 break;
                             default:
                                 data[elem.name] = elem.value;
@@ -433,8 +435,7 @@ export default {
                         throw new Error();
                     }
                 }
-                
-                
+
                 // ADD QUERY VAR
                 for (const query of this.content.queries) {
                     const value = this.$route.query[query.key];
@@ -458,13 +459,12 @@ export default {
                     headers,
                 });
 
-
                 this.afterSubmitAction();
 
                 // CHANGE STATUS
                 this.setState('success');
             } catch (err) {
-                console.log("ERROR", err);
+                console.log('ERROR', err);
                 // CHANGE STATUS
                 this.setState('error');
 
