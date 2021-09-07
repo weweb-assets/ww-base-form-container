@@ -446,6 +446,18 @@ export default {
                     return { ...headersObj, [elem.key]: elem.value };
                 }, {});
 
+                console.log({
+                    method: this.content.method,
+                    url: this.content.url,
+                    data: {
+                        ...this.content.data.reduce((dataObj, elem) => {
+                            return { ...dataObj, [elem.key]: elem.value };
+                        }, {}),
+                        ...this.getComputedData(data),
+                    },
+                    headers,
+                });
+
                 // REQUEST
                 await axios({
                     method: this.content.method,
