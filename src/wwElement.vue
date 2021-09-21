@@ -6,7 +6,7 @@
         :class="[formState, { editing: isEditing, selected: isSelected }]"
         @submit.prevent="submit"
     >
-        <wwLink v-show="false" ref="link" :ww-link="content.afterSubmitAction.link" />
+        <wwLink v-show="false" ref="link" :ww-link="content.afterSubmitActionLink" />
 
         <div class="ww-form-container__relative">
             <wwLayout
@@ -34,14 +34,6 @@
 </template>
 
 <script>
-/* wwEditor:start */
-import {
-    getSettingsConfigurations,
-    getAfterActionSubmitConfigurations,
-    getAfterActionErrorConfigurations,
-} from './configurations';
-/* wwEditor:end */
-
 export default {
     props: {
         content: { type: Object, required: true },
@@ -49,148 +41,7 @@ export default {
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
     },
-    emits: ['update:content', 'update-forced'],
-    wwDefaultContent: {
-        content: [
-            { isWwObject: true, type: 'ww-form-input' },
-            { isWwObject: true, type: 'ww-button' },
-        ],
-        successContent: [{ isWwObject: true, type: 'ww-text' }],
-        errorContent: [{ isWwObject: true, type: 'ww-text' }],
-        state: 'normal',
-        name: '',
-        autocomplete: true,
-        submitAction: 'weweb-email',
-        method: 'post',
-        url: '',
-        data: [],
-        headers: [],
-        queries: [],
-        wewebEmail: {},
-        airtable: {},
-        afterSubmitAction: {
-            type: 'none',
-            link: {},
-            customScript: {},
-        },
-        afterErrorAction: {
-            type: 'none',
-            link: {},
-            customScript: {},
-        },
-    },
-    /* wwEditor:start */
-    wwEditorConfiguration({ content }) {
-        return {
-            settingsOptions: {
-                state: {
-                    path: 'state',
-                    label: { en: 'Form state', fr: 'Status du form.' },
-                    type: 'TextSelect',
-                    options: {
-                        options: [
-                            { value: 'normal', label: { en: 'Normal', fr: 'Normal' } },
-                            { value: 'success', label: { en: 'Success', fr: 'Succès' } },
-                            { value: 'error', label: { en: 'Error', fr: 'Erreur' } },
-                        ],
-                    },
-                },
-                name: {
-                    path: 'name',
-                    label: { en: 'Form name', fr: 'Nom du form.' },
-                    type: 'Text',
-                    options: {
-                        placeholder: 'newsletter',
-                    },
-                },
-                autocomplete: {
-                    path: 'autocomplete',
-                    label: { en: 'Autocomplete', fr: 'Autocomplétion' },
-                    type: 'OnOff',
-                },
-                submitAction: {
-                    path: 'submitAction',
-                    label: { en: 'Submit action', fr: 'Action au submit' },
-                    type: 'TextSelect',
-                    options: {
-                        options: [
-                            { value: 'custom-request', label: { en: 'Custom request', fr: 'Requête person.' } },
-                            { value: 'weweb-email', label: { en: 'WeWeb email', fr: 'Email WeWeb' } },
-                            { value: 'zapier-hook', label: { en: 'Zapier Hook', fr: 'Hook Zapier' } },
-                            { value: 'airtable', label: { en: 'Airtable', fr: 'Airtable' } },
-                        ],
-                    },
-                },
-                ...getSettingsConfigurations(content.submitAction),
-                data: {
-                    path: 'data',
-                    label: { en: 'Hidden input', fr: 'Input caché' },
-                    type: 'List',
-                    options: {
-                        options: [
-                            {
-                                path: 'key',
-                                type: 'Text',
-                                options: {
-                                    placeholder: 'Key',
-                                },
-                            },
-                            {
-                                path: 'value',
-                                type: 'Text',
-                                options: {
-                                    placeholder: 'Value',
-                                },
-                            },
-                        ],
-                    },
-                },
-                query: {
-                    path: 'queries',
-                    label: { en: 'Query var', fr: 'Variable de query' },
-                    type: 'List',
-                    options: {
-                        options: [
-                            {
-                                path: 'key',
-                                type: 'Text',
-                                options: {
-                                    placeholder: 'Variable',
-                                },
-                            },
-                        ],
-                    },
-                },
-                afterSubmitAction: {
-                    path: 'afterSubmitAction.type',
-                    label: { en: 'Action after submit', fr: 'Action après le submit' },
-                    type: 'TextSelect',
-                    options: {
-                        options: [
-                            { value: 'none', label: { en: 'None', fr: 'Aucune' } },
-                            { value: 'link', label: { en: 'Link', fr: 'Link' } },
-                            { value: 'custom-script', label: { en: 'Custom script', fr: 'Script custom' } },
-                        ],
-                    },
-                },
-                ...getAfterActionSubmitConfigurations(content.afterSubmitAction.type),
-                afterErrorAction: {
-                    path: 'afterErrorAction.type',
-                    label: { en: 'Action after error', fr: 'Action après une erreur' },
-                    type: 'TextSelect',
-                    options: {
-                        options: [
-                            { value: 'none', label: { en: 'None', fr: 'Aucune' } },
-                            { value: 'link', label: { en: 'Link', fr: 'Link' } },
-                            { value: 'custom-script', label: { en: 'Custom script', fr: 'Script custom' } },
-                        ],
-                    },
-                },
-                ...getAfterActionErrorConfigurations(content.afterErrorAction.type),
-            },
-        };
-    },
-    /* wwEditor:end */
+    emits: ['update:content', 'update:sidepanel-content', 'update:content:effect'],
     data() {
         return {
             designName: wwLib.wwWebsiteData.getWebsiteName(),
@@ -219,7 +70,7 @@ export default {
         },
         formState() {
             /* wwEditor:start */
-            return this.content.state;
+            return this.wwEditorState.sidePanelContent.state;
             /* wwEditor:end */
             /* wwFront:start */
             // eslint-disable-next-line no-unreachable
@@ -232,129 +83,114 @@ export default {
         'content.submitAction'() {
             switch (this.content.submitAction) {
                 case 'weweb-email':
-                    return this.$emit('update:content', {
+                    return this.$emit('update:content:effect', {
                         method: 'post',
                         url: `${this.apiUrl}/design/${this.designId}/form/email`,
                         headers: [],
-                        wewebEmail: {
-                            recipients: [{ email: wwLib.wwEditorHelper.getUser().email }],
-                        },
+                        wewebEmailRecipients: [{ email: wwLib.wwEditorHelper.getUser().email }],
                     });
                 case 'custom-request':
-                    return this.$emit('update:content', {
+                    return this.$emit('update:content:effect', {
                         method: 'post',
                         url: '',
                         headers: [],
-                        wewebEmail: {},
+                        wewebEmailRecipients: [],
                     });
                 case 'zapier-hook':
-                    return this.$emit('update:content', {
+                    return this.$emit('update:content:effect', {
                         method: 'post',
                         url: '',
                         headers: [{ key: 'Content-Type', value: 'application/x-www-form-urlencoded' }],
-                        wewebEmail: {},
+                        wewebEmailRecipients: [],
                     });
                 case 'airtable':
-                    const airtable = this.content.airtable || {};
-                    return this.$emit('update:content', {
+                    return this.$emit('update:content:effect', {
                         method: 'post',
-                        url: `https://api.airtable.com/v0/${airtable.baseKey}/${airtable.tableName}`,
+                        url: `https://api.airtable.com/v0/${this.content.airtableBaseKey}/${this.content.airtableTableName}`,
                         headers: [
                             { key: 'Content-Type', value: 'application/json' },
-                            { key: 'Authorization', value: `Bearer ${airtable.apiKey}` },
+                            { key: 'Authorization', value: `Bearer ${this.airtableApiKey}` },
                         ],
-                        wewebEmail: {},
+                        wewebEmailRecipients: [],
                     });
             }
         },
-        'content.afterSubmitAction.type'() {
-            switch (this.content.afterSubmitAction.type) {
+        'content.afterSubmitActionType'() {
+            switch (this.content.afterSubmitActionType) {
                 case 'none':
-                    this.$emit('update:content', {
-                        afterSubmitAction: {
-                            type: 'none',
-                            link: {},
-                            customScript: {},
-                        },
+                    this.$emit('update:content:effect', {
+                        afterSubmitActionType: 'none',
+                        afterSubmitActionLink: {},
+                        afterSubmitActionCustomScript: {},
                     });
                     break;
                 case 'link':
-                    this.$emit('update:content', {
-                        afterSubmitAction: {
-                            type: 'link',
-                            link: {
-                                type: 'internal',
-                                pageId: wwLib.wwWebsiteData.getCurrentPageId(),
-                                sectionId: null,
-                                targetBlank: false,
-                            },
-                            customScript: {},
+                    this.$emit('update:content:effect', {
+                        afterSubmitActionType: 'link',
+                        afterSubmitActionLink: {
+                            type: 'internal',
+                            pageId: wwLib.wwWebsiteData.getCurrentPageId(),
+                            sectionId: null,
+                            targetBlank: false,
                         },
+                        afterSubmitActionCustomScript: {},
                     });
                     break;
                 case 'custom-script':
-                    this.$emit('update:content', {
-                        afterSubmitAction: {
-                            type: 'custom-script',
-                            link: {},
-                            customScript: {},
-                        },
+                    this.$emit('update:content:effect', {
+                        afterSubmitActionType: 'custom-script',
+                        afterSubmitActionLink: {},
+                        afterSubmitActionCustomScript: {},
                     });
                     break;
             }
         },
-        'content.afterErrorAction.type'() {
+        'content.afterErrorActionType'() {
             switch (this.content.afterErrorAction.type) {
                 case 'none':
-                    this.$emit('update:content', {
-                        afterErrorAction: {
-                            type: 'none',
-                            link: {},
-                            customScript: {},
-                        },
+                    this.$emit('update:content:effect', {
+                        afterErrorActionType: 'none',
+                        afterErrorActionLink: {},
+                        afterErrorActionCustomScript: {},
                     });
                     break;
                 case 'link':
-                    this.$emit('update:content', {
-                        afterErrorAction: {
-                            type: 'link',
-                            link: {
-                                type: 'internal',
-                                pageId: wwLib.wwWebsiteData.getCurrentPageId(),
-                                sectionId: null,
-                                targetBlank: false,
-                            },
-                            customScript: {},
+                    this.$emit('update:content:effect', {
+                        afterErrorActionType: 'link',
+                        afterErrorActionLink: {
+                            type: 'internal',
+                            pageId: wwLib.wwWebsiteData.getCurrentPageId(),
+                            sectionId: null,
+                            targetBlank: false,
                         },
+                        afterErrorActionCustomScript: {},
                     });
                     break;
                 case 'custom-script':
-                    this.$emit('update:content', {
-                        afterErrorAction: {
-                            type: 'custom-script',
-                            link: {},
-                            customScript: {},
-                        },
+                    this.$emit('update:content:effect', {
+                        afterErrorActionType: 'custom-script',
+                        afterErrorActionLink: {},
+                        afterErrorActionCustomScript: {},
                     });
                     break;
             }
         },
-        'content.airtable.apiKey'() {
-            this.$emit('update:content', {
+        'content.airtableApiKey'() {
+            this.$emit('update:content:effect', {
                 headers: [
                     { key: 'Content-Type', value: 'application/json' },
-                    { key: 'Authorization', value: `Bearer ${this.content.airtable.apiKey}` },
+                    { key: 'Authorization', value: `Bearer ${this.content.airtableApiKey}` },
                 ],
             });
         },
-        'content.airtable.baseKey'() {
-            this.$emit('update:content', {
-                url: `https://api.airtable.com/v0/${this.content.airtable.baseKey}/${this.content.airtable.tableName}`,
+        'content.airtableBaseKey'() {
+            this.$emit('update:content:effect', {
+                url: `https://api.airtable.com/v0/${this.content.airtableBaseKey}/${this.content.airtableTableName}`,
             });
         },
-        'content.airtable.tableName'() {
-            this.$emit('update:content', {
-                url: `https://api.airtable.com/v0/${this.content.airtable.baseKey}/${this.content.airtable.tableName}`,
+        'content.airtableTableName'() {
+            this.$emit('update:content:effect', {
+                url: `https://api.airtable.com/v0/${this.content.airtableBaseKey}/${this.content.airtableTableName}`,
             });
         },
     },
@@ -365,7 +201,7 @@ export default {
     methods: {
         setState(state) {
             /* wwEditor:start */
-            this.$emit('update-forced', { state });
+            this.$emit('update:sidepanel-content', { path: 'state', value: state });
             /* wwEditor:end */
             /* wwFront:start */
             this.state = state;
@@ -376,7 +212,7 @@ export default {
                 case 'weweb-email':
                     return {
                         designName: this.designName,
-                        recipients: this.content.wewebEmail.recipients,
+                        recipients: this.content.wewebEmailRecipients,
                         ...data,
                     };
                 case 'airtable':
@@ -446,18 +282,6 @@ export default {
                     return { ...headersObj, [elem.key]: elem.value };
                 }, {});
 
-                console.log({
-                    method: this.content.method,
-                    url: this.content.url,
-                    data: {
-                        ...this.content.data.reduce((dataObj, elem) => {
-                            return { ...dataObj, [elem.key]: elem.value };
-                        }, {}),
-                        ...this.getComputedData(data),
-                    },
-                    headers,
-                });
-
                 // REQUEST
                 await axios({
                     method: this.content.method,
@@ -486,19 +310,19 @@ export default {
             }
         },
         async afterSubmitAction() {
-            switch (this.content.afterSubmitAction.type) {
+            switch (this.content.afterSubmitActionType) {
                 case 'link':
                     return this.$refs.link.$el.click();
                 case 'custom-script':
-                    return eval(this.content.afterSubmitAction.customScript.code);
+                    return eval(this.content.afterSubmitActionCustomScript.code);
             }
         },
         async afterErrorAction() {
-            switch (this.content.afterErrorAction.type) {
+            switch (this.content.afterErrorActionType) {
                 case 'link':
                     return this.$refs.link.$el.click();
                 case 'custom-script':
-                    return eval(this.content.afterErrorAction.customScript.code);
+                    return eval(this.content.afterErrorActionCustomScript.code);
             }
         },
     },
