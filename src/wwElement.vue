@@ -276,8 +276,8 @@ export default {
 
                 // ADD QUERY VAR
                 for (const query of this.content.queries) {
-                    const value = this.$route.query[query.key];
-                    if (value) data[query.key] = value;
+                    const value = this.$route.query[query];
+                    if (value) data[query] = value;
                 }
 
                 const headers = this.content.headers.reduce((headersObj, elem) => {

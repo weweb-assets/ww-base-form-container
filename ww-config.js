@@ -199,18 +199,13 @@ export default {
         },
         queries: {
             label: { en: 'Query var', fr: 'Variable de query' },
-            type: 'List',
+            type: 'Array',
             section: 'settings',
             options: {
-                options: [
-                    {
-                        path: 'key',
-                        type: 'Text',
-                        options: {
-                            placeholder: 'Variable',
-                        },
-                    },
-                ],
+                type: 'Text',
+                options: {
+                    placeholder: 'Variable',
+                },
             },
             defaultValue: [],
         },
