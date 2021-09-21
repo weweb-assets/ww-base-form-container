@@ -146,7 +146,7 @@ export default {
             }
         },
         'content.afterErrorActionType'() {
-            switch (this.content.afterErrorAction.type) {
+            switch (this.content.afterErrorActionType) {
                 case 'none':
                     this.$emit('update:content:effect', {
                         afterErrorActionType: 'none',
