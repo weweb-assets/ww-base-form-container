@@ -75,18 +75,16 @@ export default {
         },
         wewebEmailRecipients: {
             label: { en: 'Recipients', fr: 'Destinataires' },
-            type: 'List',
+            type: 'Array',
             section: 'settings',
             options: {
-                options: [
-                    {
-                        path: 'email',
-                        type: 'Text',
-                        options: {
-                            placeholder: 'Email address',
-                        },
+                item: {
+                    type: 'Text',
+                    options: {
+                        placeholder: 'Email address',
                     },
-                ],
+                    defaultValue: '',
+                },
             },
             hidden: content => content.submitAction !== 'weweb-email',
             defaultValue: [],

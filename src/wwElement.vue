@@ -87,7 +87,7 @@ export default {
                         method: 'post',
                         url: `${this.apiUrl}/design/${this.designId}/form/email`,
                         headers: [],
-                        wewebEmailRecipients: [{ email: wwLib.wwEditorHelper.getUser().email }],
+                        wewebEmailRecipients: [wwLib.wwEditorHelper.getUser().email],
                     });
                 case 'custom-request':
                     return this.$emit('update:content:effect', {
@@ -212,7 +212,9 @@ export default {
                 case 'weweb-email':
                     return {
                         designName: this.designName,
-                        recipients: this.content.wewebEmailRecipients,
+                        recipients: this.content.wewebEmailRecipients.map(email => {
+                            email;
+                        }),
                         ...data,
                     };
                 case 'airtable':
