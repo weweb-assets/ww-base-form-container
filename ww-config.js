@@ -95,7 +95,7 @@ export default {
             label: { en: 'Type of request', fr: 'Type de requête' },
             type: 'TextSelect',
             section: 'settings',
-            options: {
+            options: content => ({
                 options: [
                     { value: 'post', label: { en: 'POST', fr: 'POST' } },
                     { value: 'get', label: { en: 'GET', fr: 'GET' } },
@@ -108,7 +108,7 @@ export default {
                           ]
                         : []),
                 ],
-            },
+            }),
             hidden: content => content.submitAction !== 'zapier-hook' && content.submitAction !== 'custom-request',
             defaultValue: 'post',
         },
