@@ -282,23 +282,22 @@ export default {
                     return { ...headersObj, [elem.key]: elem.value };
                 }, {});
 
-                const data = {
+                const formData = {
                     ...this.content.data.reduce((dataObj, elem) => {
                         return { ...dataObj, [elem.key]: elem.value };
                     }, {}),
                     ...this.getComputedData(data),
-                }
+                };
 
                 // REQUEST
                 await axios({
                     method: this.content.method,
                     url: this.content.url,
-                    data,
+                    data: formData,
                     headers,
                 });
-                
-                
-                this.$emit('trigger-event', { name: 'submit', payload: { formData: data } })
+
+                this.$emit('trigger-event', { name: 'submit', payload: { formData: data } });
                 this.afterSubmitAction();
 
                 // CHANGE STATUS
@@ -307,7 +306,7 @@ export default {
                 // CHANGE STATUS
                 this.setState('error');
 
-                this.$emit('trigger-event', { name: 'submit-error', payload: { formError: err } })
+                this.$emit('trigger-event', { name: 'submit-error', payload: { formError: err } });
                 this.afterErrorAction();
 
                 wwLib.wwLog.error(err);
