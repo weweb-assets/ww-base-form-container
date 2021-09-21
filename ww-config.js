@@ -83,6 +83,7 @@ export default {
                     options: {
                         placeholder: 'Email address',
                     },
+                    bindable: true,
                     defaultValue: '',
                 },
             },
