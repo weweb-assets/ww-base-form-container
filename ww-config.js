@@ -10,6 +10,10 @@ export default {
             },
         },
     },
+    triggerEvents: [
+        { name: 'submit', label: { en: 'On submit' } },
+        { name: 'submit-error', label: { en: 'On submit error' } },
+    ],
     properties: {
         state: {
             label: { en: 'Form state', fr: 'Status du form.' },

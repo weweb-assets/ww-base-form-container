@@ -282,28 +282,32 @@ export default {
                     return { ...headersObj, [elem.key]: elem.value };
                 }, {});
 
+                const data = {
+                    ...this.content.data.reduce((dataObj, elem) => {
+                        return { ...dataObj, [elem.key]: elem.value };
+                    }, {}),
+                    ...this.getComputedData(data),
+                }
+
                 // REQUEST
                 await axios({
                     method: this.content.method,
                     url: this.content.url,
-                    data: {
-                        ...this.content.data.reduce((dataObj, elem) => {
-                            return { ...dataObj, [elem.key]: elem.value };
-                        }, {}),
-                        ...this.getComputedData(data),
-                    },
+                    data,
                     headers,
                 });
-
+                
+                
+                this.$emit('trigger-event', { name: 'submit', payload: { formData: data } })
                 this.afterSubmitAction();
 
                 // CHANGE STATUS
                 this.setState('success');
             } catch (err) {
-                console.log('ERROR', err);
                 // CHANGE STATUS
                 this.setState('error');
 
+                this.$emit('trigger-event', { name: 'submit-error', payload: { formError: err } })
                 this.afterErrorAction();
 
                 wwLib.wwLog.error(err);
