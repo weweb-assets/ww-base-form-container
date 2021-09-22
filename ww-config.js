@@ -202,10 +202,12 @@ export default {
             type: 'Array',
             section: 'settings',
             options: {
-                type: 'Text',
-                options: {
-                    placeholder: 'Variable',
-                },
+                item: {
+                    type: 'Text',
+                    options: {
+                        placeholder: 'Variable',
+                    }
+                }
             },
             defaultValue: [],
         },
