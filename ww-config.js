@@ -31,10 +31,10 @@ export default {
         },
         content: {
             hidden: true,
-            defaultValue: [
-                { isWwObject: true, type: 'ww-form-input' },
-                { isWwObject: true, type: 'ww-button' },
-            ],
+            // defaultValue: [
+            //     { isWwObject: true, type: 'ww-form-input' },
+            //     { isWwObject: true, type: 'ww-button' },
+            // ],
         },
         successContent: {
             hidden: true,
