@@ -41,7 +41,7 @@ export default {
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
     },
-    emits: ['update:content', 'update:sidepanel-content', 'update:content:effect'],
+    emits: ['update:sidepanel-content', 'update:content:effect', 'trigger-event'],
     data() {
         return {
             designName: wwLib.wwWebsiteData.getWebsiteName(),
