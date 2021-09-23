@@ -123,25 +123,23 @@ export default {
         },
         headers: {
             label: { en: 'Request headers', fr: 'Entêtes de requête' },
-            type: 'List',
+            type: 'Object',
             section: 'settings',
             options: {
-                options: [
-                    {
-                        path: 'key',
+                item: {
+                    key: {
                         type: 'Text',
                         options: {
                             placeholder: 'Key',
                         },
                     },
-                    {
-                        path: 'value',
+                    path: {
                         type: 'Text',
                         options: {
                             placeholder: 'Value',
                         },
-                    },
-                ],
+                    }
+                }
             },
             hidden: content => content.submitAction !== 'zapier-hook' && content.submitAction !== 'custom-request',
             defaultValue: [],
