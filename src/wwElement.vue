@@ -6,7 +6,7 @@
         :class="[formState, { editing: isEditing, selected: isSelected }]"
         @submit.prevent="submit"
     >
-        <wwLink v-show="false" ref="link" :ww-link="content.afterSubmitActionLink" />
+        <wwLink v-show="false" ref="link" :ww-link="content.afterSubmitAction.link" />
 
         <div class="ww-form-container__relative">
             <wwLayout
@@ -87,110 +87,126 @@ export default {
                         method: 'post',
                         url: `${this.apiUrl}/design/${this.designId}/form/email`,
                         headers: [],
-                        wewebEmailRecipients: [wwLib.wwEditorHelper.getUser().email],
+                        wewebEmail: {
+                            recipients: [{ email: wwLib.wwEditorHelper.getUser().email }],
+                        },
                     });
                 case 'custom-request':
                     return this.$emit('update:content:effect', {
                         method: 'post',
                         url: '',
                         headers: [],
-                        wewebEmailRecipients: [],
+                        wewebEmail: {},
                     });
                 case 'zapier-hook':
                     return this.$emit('update:content:effect', {
                         method: 'post',
                         url: '',
                         headers: [{ key: 'Content-Type', value: 'application/x-www-form-urlencoded' }],
-                        wewebEmailRecipients: [],
+                        wewebEmail: {},
                     });
-                case 'airtable':
+                case 'airtable': {
+                    const airtable = this.content.airtable || {};
                     return this.$emit('update:content:effect', {
                         method: 'post',
-                        url: `https://api.airtable.com/v0/${this.content.airtableBaseKey}/${this.content.airtableTableName}`,
+                        url: `https://api.airtable.com/v0/${airtable.baseKey}/${airtable.tableName}`,
                         headers: [
                             { key: 'Content-Type', value: 'application/json' },
-                            { key: 'Authorization', value: `Bearer ${this.airtableApiKey}` },
+                            { key: 'Authorization', value: `Bearer ${airtable.apiKey}` },
                         ],
-                        wewebEmailRecipients: [],
+                        wewebEmail: {},
                     });
+                }
             }
         },
-        'content.afterSubmitActionType'() {
-            switch (this.content.afterSubmitActionType) {
+        'content.afterSubmitAction.type'() {
+            switch (this.content.afterSubmitAction.type) {
                 case 'none':
                     this.$emit('update:content:effect', {
-                        afterSubmitActionType: 'none',
-                        afterSubmitActionLink: {},
-                        afterSubmitActionCustomScript: {},
+                        afterSubmitAction: {
+                            type: 'none',
+                            link: {},
+                            customScript: {},
+                        },
                     });
                     break;
                 case 'link':
                     this.$emit('update:content:effect', {
-                        afterSubmitActionType: 'link',
-                        afterSubmitActionLink: {
-                            type: 'internal',
-                            pageId: wwLib.wwWebsiteData.getCurrentPageId(),
-                            sectionId: null,
-                            targetBlank: false,
+                        afterSubmitAction: {
+                            type: 'link',
+                            link: {
+                                type: 'internal',
+                                pageId: wwLib.wwWebsiteData.getCurrentPageId(),
+                                sectionId: null,
+                                targetBlank: false,
+                            },
+                            customScript: {},
                         },
-                        afterSubmitActionCustomScript: {},
                     });
                     break;
                 case 'custom-script':
                     this.$emit('update:content:effect', {
-                        afterSubmitActionType: 'custom-script',
-                        afterSubmitActionLink: {},
-                        afterSubmitActionCustomScript: {},
+                        afterSubmitAction: {
+                            type: 'custom-script',
+                            link: {},
+                            customScript: {},
+                        },
                     });
                     break;
             }
         },
-        'content.afterErrorActionType'() {
-            switch (this.content.afterErrorActionType) {
+        'content.afterErrorAction.type'() {
+            switch (this.content.afterErrorAction.type) {
                 case 'none':
                     this.$emit('update:content:effect', {
-                        afterErrorActionType: 'none',
-                        afterErrorActionLink: {},
-                        afterErrorActionCustomScript: {},
+                        afterErrorAction: {
+                            type: 'none',
+                            link: {},
+                            customScript: {},
+                        },
                     });
                     break;
                 case 'link':
                     this.$emit('update:content:effect', {
-                        afterErrorActionType: 'link',
-                        afterErrorActionLink: {
-                            type: 'internal',
-                            pageId: wwLib.wwWebsiteData.getCurrentPageId(),
-                            sectionId: null,
-                            targetBlank: false,
+                        afterErrorAction: {
+                            type: 'link',
+                            link: {
+                                type: 'internal',
+                                pageId: wwLib.wwWebsiteData.getCurrentPageId(),
+                                sectionId: null,
+                                targetBlank: false,
+                            },
+                            customScript: {},
                         },
-                        afterErrorActionCustomScript: {},
                     });
                     break;
                 case 'custom-script':
                     this.$emit('update:content:effect', {
-                        afterErrorActionType: 'custom-script',
-                        afterErrorActionLink: {},
-                        afterErrorActionCustomScript: {},
+                        afterErrorAction: {
+                            type: 'custom-script',
+                            link: {},
+                            customScript: {},
+                        },
                     });
                     break;
             }
         },
-        'content.airtableApiKey'() {
+        'content.airtable.apiKey'() {
             this.$emit('update:content:effect', {
                 headers: [
                     { key: 'Content-Type', value: 'application/json' },
-                    { key: 'Authorization', value: `Bearer ${this.content.airtableApiKey}` },
+                    { key: 'Authorization', value: `Bearer ${this.content.airtable.apiKey}` },
                 ],
             });
         },
-        'content.airtableBaseKey'() {
+        'content.airtable.baseKey'() {
             this.$emit('update:content:effect', {
-                url: `https://api.airtable.com/v0/${this.content.airtableBaseKey}/${this.content.airtableTableName}`,
+                url: `https://api.airtable.com/v0/${this.content.airtable.baseKey}/${this.content.airtable.tableName}`,
             });
         },
-        'content.airtableTableName'() {
+        'content.airtable.tableName'() {
             this.$emit('update:content:effect', {
-                url: `https://api.airtable.com/v0/${this.content.airtableBaseKey}/${this.content.airtableTableName}`,
+                url: `https://api.airtable.com/v0/${this.content.airtable.baseKey}/${this.content.airtable.tableName}`,
             });
         },
     },
@@ -212,9 +228,7 @@ export default {
                 case 'weweb-email':
                     return {
                         designName: this.designName,
-                        recipients: this.content.wewebEmailRecipients.map(email => {
-                            email;
-                        }),
+                        recipients: this.content.wewebEmail.recipients,
                         ...data,
                     };
                 case 'airtable':
@@ -315,19 +329,19 @@ export default {
             }
         },
         async afterSubmitAction() {
-            switch (this.content.afterSubmitActionType) {
+            switch (this.content.afterSubmitAction.type) {
                 case 'link':
                     return this.$refs.link.$el.click();
                 case 'custom-script':
-                    return eval(this.content.afterSubmitActionCustomScript.code);
+                    return eval(this.content.afterSubmitAction.customScript.code);
             }
         },
         async afterErrorAction() {
-            switch (this.content.afterErrorActionType) {
+            switch (this.content.afterErrorAction.type) {
                 case 'link':
                     return this.$refs.link.$el.click();
                 case 'custom-script':
-                    return eval(this.content.afterErrorActionCustomScript.code);
+                    return eval(this.content.afterErrorAction.customScript.code);
             }
         },
     },

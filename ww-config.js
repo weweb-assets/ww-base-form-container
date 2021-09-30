@@ -31,10 +31,10 @@ export default {
         },
         content: {
             hidden: true,
-            // defaultValue: [
-            //     { isWwObject: true, type: 'ww-form-input' },
-            //     { isWwObject: true, type: 'ww-button' },
-            // ],
+            defaultValue: [
+                { isWwObject: true, type: 'ww-form-input' },
+                { isWwObject: true, type: 'ww-button' },
+            ],
         },
         successContent: {
             hidden: true,
@@ -73,22 +73,34 @@ export default {
             },
             defaultValue: 'weweb-email',
         },
-        wewebEmailRecipients: {
-            label: { en: 'Recipients', fr: 'Destinataires' },
-            type: 'Array',
+        wewebEmail: {
+            type: 'Object',
             section: 'settings',
             options: {
                 item: {
-                    type: 'Text',
-                    options: {
-                        placeholder: 'Email address',
+                    recipients: {
+                        label: { en: 'Recipients', fr: 'Destinataires' },
+                        type: 'Array',
+                        options: {
+                            item: {
+                                type: 'Object',
+                                options: {
+                                    item: {
+                                        email: {
+                                            type: 'Text',
+                                            options: { placeholder: 'Email address' },
+                                            bindable: true,
+                                            defaultValue: '',
+                                        },
+                                    },
+                                },
+                            },
+                        },
                     },
-                    bindable: true,
-                    defaultValue: '',
                 },
             },
             hidden: content => content.submitAction !== 'weweb-email',
-            defaultValue: [],
+            defaultValue: { recipients: [] },
         },
         method: {
             label: { en: 'Type of request', fr: 'Type de requête' },
@@ -141,40 +153,41 @@ export default {
                                 options: {
                                     placeholder: 'Value',
                                 },
-                            }
-                        }
+                            },
+                        },
                     },
-                }
+                },
             },
             hidden: content => content.submitAction !== 'zapier-hook' && content.submitAction !== 'custom-request',
             defaultValue: [],
         },
-        airtableApiKey: {
-            label: { en: 'Api key', fr: "Clée de l'api" },
-            type: 'Text',
+        airtable: {
+            type: 'Object',
             section: 'settings',
             options: {
-                placeholder: 'key',
+                item: {
+                    apiKey: {
+                        label: { en: 'Api key', fr: "Clée de l'api" },
+                        type: 'Text',
+                        section: 'settings',
+                        options: { placeholder: 'key' },
+                    },
+                    baseKey: {
+                        label: { en: 'Base key', fr: 'Clée de la base' },
+                        type: 'Text',
+                        section: 'settings',
+                        options: { placeholder: 'key' },
+                    },
+                    tableName: {
+                        label: { en: 'Table name', fr: 'Nom de la table' },
+                        type: 'Text',
+                        section: 'settings',
+                        options: { placeholder: 'Name' },
+                    },
+                },
             },
             hidden: content => content.submitAction !== 'airtable',
-        },
-        airtableBaseKey: {
-            label: { en: 'Base key', fr: 'Clée de la base' },
-            type: 'Text',
-            section: 'settings',
-            options: {
-                placeholder: 'key',
-            },
-            hidden: content => content.submitAction !== 'airtable',
-        },
-        airtableTableName: {
-            label: { en: 'Table name', fr: 'Nom de la table' },
-            type: 'Text',
-            section: 'settings',
-            options: {
-                placeholder: 'Name',
-            },
-            hidden: content => content.submitAction !== 'airtable',
+            defaultValue: {},
         },
         data: {
             label: { en: 'Hidden input', fr: 'Input caché' },
@@ -209,64 +222,76 @@ export default {
                     type: 'Text',
                     options: {
                         placeholder: 'Variable',
-                    }
-                }
+                    },
+                },
             },
             defaultValue: [],
         },
-        afterSubmitActionType: {
-            label: { en: 'Action after submit', fr: 'Action après le submit' },
-            type: 'TextSelect',
+        afterSubmitAction: {
+            type: 'Object',
             section: 'settings',
             options: {
-                options: [
-                    { value: 'none', label: { en: 'None', fr: 'Aucune' } },
-                    { value: 'link', label: { en: 'Link', fr: 'Link' } },
-                    { value: 'custom-script', label: { en: 'Custom script', fr: 'Script custom' } },
-                ],
+                item: {
+                    type: {
+                        label: { en: 'Action after submit', fr: 'Action après le submit' },
+                        type: 'TextSelect',
+                        section: 'settings',
+                        options: {
+                            options: [
+                                { value: 'none', label: { en: 'None', fr: 'Aucune' } },
+                                { value: 'link', label: { en: 'Link', fr: 'Link' } },
+                                { value: 'custom-script', label: { en: 'Custom script', fr: 'Script custom' } },
+                            ],
+                        },
+                    },
+                    link: {
+                        label: { en: '', fr: '' },
+                        type: 'Link',
+                        section: 'settings',
+                        hidden: content => content.afterSubmitAction.type !== 'link',
+                    },
+                    customScript: {
+                        label: { en: '', fr: '' },
+                        type: 'Script',
+                        section: 'settings',
+                        hidden: content => content.afterSubmitAction.type !== 'custom-script',
+                    },
+                },
             },
-            defaultValue: 'none',
+            defaultValue: { type: 'none' },
         },
-        afterSubmitActionLink: {
-            label: { en: '', fr: '' },
-            type: 'Link',
-            section: 'settings',
-            hidden: content => content.afterSubmitActionType !== 'link',
-            defaultValue: {},
-        },
-        afterSubmitActionCustomScript: {
-            label: { en: '', fr: '' },
-            type: 'Script',
-            section: 'settings',
-            hidden: content => content.afterSubmitActionType !== 'custom-script',
-            defaultValue: {},
-        },
-        afterErrorActionType: {
-            label: { en: 'Action after error', fr: 'Action après une erreur' },
-            type: 'TextSelect',
+        afterErrorAction: {
+            type: 'Object',
             section: 'settings',
             options: {
-                options: [
-                    { value: 'none', label: { en: 'None', fr: 'Aucune' } },
-                    { value: 'link', label: { en: 'Link', fr: 'Link' } },
-                    { value: 'custom-script', label: { en: 'Custom script', fr: 'Script custom' } },
-                ],
+                item: {
+                    type: {
+                        label: { en: 'Action after error', fr: 'Action après une erreur' },
+                        type: 'TextSelect',
+                        section: 'settings',
+                        options: {
+                            options: [
+                                { value: 'none', label: { en: 'None', fr: 'Aucune' } },
+                                { value: 'link', label: { en: 'Link', fr: 'Link' } },
+                                { value: 'custom-script', label: { en: 'Custom script', fr: 'Script custom' } },
+                            ],
+                        },
+                    },
+                    link: {
+                        label: { en: '', fr: '' },
+                        type: 'Link',
+                        section: 'settings',
+                        hidden: content => content.afterErrorAction.type !== 'link',
+                    },
+                    customScript: {
+                        label: { en: '', fr: '' },
+                        type: 'Script',
+                        section: 'settings',
+                        hidden: content => content.afterErrorAction.type !== 'custom-script',
+                    },
+                },
             },
-            defaultValue: 'none',
-        },
-        afterErrorActionLink: {
-            label: { en: '', fr: '' },
-            type: 'Link',
-            section: 'settings',
-            hidden: content => content.afterErrorActionType !== 'link',
-            defaultValue: {},
-        },
-        afterErrorActionCustomScript: {
-            label: { en: '', fr: '' },
-            type: 'Script',
-            section: 'settings',
-            hidden: content => content.afterErrorActionType !== 'custom-script',
-            defaultValue: {},
+            defaultValue: { type: 'none' },
         },
     },
 };
