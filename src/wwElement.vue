@@ -70,7 +70,7 @@ export default {
         },
         formState() {
             /* wwEditor:start */
-            return this.wwEditorState.sidePanelContent.state;
+            return this.wwEditorState.sidepanelContent.state;
             /* wwEditor:end */
             /* wwFront:start */
             // eslint-disable-next-line no-unreachable
