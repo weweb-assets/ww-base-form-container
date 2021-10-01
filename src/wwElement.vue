@@ -313,7 +313,7 @@ export default {
                     headers,
                 });
 
-                this.$emit('trigger-event', { name: 'submit', payload: { formData: data } });
+                this.$emit('trigger-event', { name: 'submit', event: { formData: data } });
                 this.afterSubmitAction();
 
                 // CHANGE STATUS
@@ -322,7 +322,7 @@ export default {
                 // CHANGE STATUS
                 this.setState('error');
 
-                this.$emit('trigger-event', { name: 'submit-error', payload: { formError: err } });
+                this.$emit('trigger-event', { name: 'submit-error', event: { formError: err } });
                 this.afterErrorAction();
 
                 wwLib.wwLog.error(err);
