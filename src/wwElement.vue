@@ -313,7 +313,7 @@ export default {
                     headers,
                 });
 
-                this.$emit('trigger-event', { name: 'submit', event: { formData: data } });
+                this.$emit('trigger-event', { name: 'submit', event: { formData } });
                 this.afterSubmitAction();
 
                 // CHANGE STATUS

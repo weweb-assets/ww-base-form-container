@@ -69,6 +69,7 @@ export default {
                     { value: 'weweb-email', label: { en: 'WeWeb email', fr: 'Email WeWeb' } },
                     { value: 'zapier-hook', label: { en: 'Zapier Hook', fr: 'Hook Zapier' } },
                     { value: 'airtable', label: { en: 'Airtable', fr: 'Airtable' } },
+                    { value: 'none', label: { en: 'None', fr: 'None' } },
                 ],
             },
             defaultValue: 'weweb-email',
@@ -191,25 +192,25 @@ export default {
         },
         data: {
             label: { en: 'Hidden input', fr: 'Input caché' },
-            type: 'List',
+            type: 'Array',
             section: 'settings',
             options: {
-                options: [
-                    {
-                        path: 'key',
-                        type: 'Text',
-                        options: {
-                            placeholder: 'Key',
+                item: {
+                    type: 'Object',
+                    section: 'settings',
+                    options: {
+                        item: {
+                            key: {
+                                type: 'Text',
+                                options: { placeholder: 'Key' },
+                            },
+                            value: {
+                                type: 'Text',
+                                options: { placeholder: 'Value' },
+                            },
                         },
                     },
-                    {
-                        path: 'value',
-                        type: 'Text',
-                        options: {
-                            placeholder: 'Value',
-                        },
-                    },
-                ],
+                },
             },
             defaultValue: [],
         },
