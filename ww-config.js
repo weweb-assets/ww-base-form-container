@@ -11,8 +11,8 @@ export default {
         },
     },
     triggerEvents: [
-        { name: 'submit', label: { en: 'On submit' } },
-        { name: 'submit-error', label: { en: 'On submit error' } },
+        { name: 'submit', label: { en: 'On submit' }, event: { formData: {} } },
+        { name: 'submit-error', label: { en: 'On submit error' }, event: { formError: new Error() } },
     ],
     properties: {
         state: {
