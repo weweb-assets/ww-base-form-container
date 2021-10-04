@@ -255,7 +255,7 @@ export default {
 
                 if (this.formState === 'success' || this.formState === 'loading') return;
 
-                this.setState('loading');
+                if (this.content.submitAction !== 'none') this.setState('loading');
 
                 // INIT DATA
                 const data = {};
