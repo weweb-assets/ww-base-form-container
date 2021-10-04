@@ -117,6 +117,14 @@ export default {
                         wewebEmail: {},
                     });
                 }
+                case 'none': {
+                    return this.$emit('update:content:effect', {
+                        method: '',
+                        url: '',
+                        headers: [],
+                        wewebEmail: {},
+                    });
+                }
             }
         },
         'content.afterSubmitAction.type'() {
@@ -306,12 +314,14 @@ export default {
                 };
 
                 // REQUEST
-                await axios({
-                    method: this.content.method,
-                    url: this.content.url,
-                    data: formData,
-                    headers,
-                });
+                if (this.content.submitAction !== 'none') {
+                    await axios({
+                        method: this.content.method,
+                        url: this.content.url,
+                        data: formData,
+                        headers,
+                    });
+                }
 
                 this.$emit('trigger-event', { name: 'submit', event: { formData } });
                 this.afterSubmitAction();
