@@ -327,7 +327,7 @@ export default {
                 this.afterSubmitAction();
 
                 // CHANGE STATUS
-                this.setState('success');
+                if (this.content.submitAction !== 'none') this.setState('success');
             } catch (err) {
                 // CHANGE STATUS
                 this.setState('error');
