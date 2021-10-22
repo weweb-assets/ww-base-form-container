@@ -207,6 +207,7 @@ export default {
                             value: {
                                 type: 'Text',
                                 options: { placeholder: 'Value' },
+                                bindable: true,
                             },
                         },
                     },
