@@ -273,6 +273,9 @@ export default {
                             case 'checkbox':
                                 data[elem.name] = elem.value === 'on' ? true : false;
                                 break;
+                            case 'radio':
+                                data[elem.name] = elem.checked ? elem.value : data[elem.name];
+                                break;
                             default:
                                 data[elem.name] = elem.value;
                                 break;
