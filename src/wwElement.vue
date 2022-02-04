@@ -26,9 +26,6 @@
         <div class="ww-form-container__status label-xs" :class="formState">
             {{ formState }}
         </div>
-        <div class="ww-form-container__menu">
-            <wwEditorIcon small name="editor" />
-        </div>
         <!-- wwEditor:end -->
     </form>
 </template>
@@ -437,37 +434,6 @@ export default {
             border: 1px solid var(--ww-editor-color);
             pointer-events: none;
             z-index: 10;
-        }
-        > .ww-form-container__menu {
-            opacity: 1;
-            pointer-events: all;
-        }
-    }
-    &__menu {
-        display: flex;
-        position: absolute;
-        top: 5px;
-        left: 0;
-        transform: translate(-50%, -50%);
-        border-radius: 100%;
-        padding: var(--ww-spacing-01);
-        transition: opacity 0.2s ease;
-        z-index: 101;
-        cursor: pointer;
-        background-color: var(--ww-color-green-500);
-        color: var(--ww-color-white);
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        pointer-events: none;
-        &:after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(45deg);
-            width: 30px;
-            height: 30px;
         }
     }
     /* wwEditor:end */

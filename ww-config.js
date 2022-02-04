@@ -9,6 +9,9 @@ export default {
                 sections: ['state'],
             },
         },
+        bubble: {
+            icon: 'editor',
+        },
     },
     triggerEvents: [
         { name: 'submit', label: { en: 'On submit' }, event: { formData: {} } },
