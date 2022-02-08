@@ -9,6 +9,7 @@ export default {
                 sections: ['state'],
             },
         },
+        icon: 'editor',
         bubble: {
             icon: 'editor',
         },
