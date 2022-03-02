@@ -23,9 +23,6 @@ export default {
         /* wwEditor:end */
     },
     emits: ['trigger-event'],
-    data() {
-        return {};
-    },
     computed: {
         formName() {
             return this.wwElementState.name;
