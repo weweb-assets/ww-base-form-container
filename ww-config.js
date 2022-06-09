@@ -10,6 +10,9 @@ export default {
         },
         workflowHint: () => {
             const currentEl = wwLib.wwUtils.getSelectedComponent();
+            if(!currentEl) {
+                return false;
+            }
             const hasSubmitBtn = currentEl.querySelector('[data-ww-flag="btn-submit"]');
             if (hasSubmitBtn) {
                 return false;
