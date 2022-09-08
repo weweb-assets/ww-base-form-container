@@ -31,7 +31,7 @@ export default {
             };
         },
     },
-    triggerEvents: [{ name: 'submit', label: { en: 'On submit' } }],
+    triggerEvents: [{ name: 'submit', label: { en: 'On submit' }, default: true }],
     properties: {
         formContent: {
             hidden: true,
