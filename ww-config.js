@@ -4,9 +4,9 @@ export default {
             fr: 'Conteneur de formulaire',
             en: 'Form Container',
         },
-        icon: 'editor',
+        icon: 'pencil',
         bubble: {
-            icon: 'editor',
+            icon: 'pencil',
         },
         workflowHint: () => {
             const currentEl = wwLib.wwUtils.getSelectedComponent();
